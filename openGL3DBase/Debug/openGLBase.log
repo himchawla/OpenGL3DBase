@@ -1,0 +1,6 @@
+﻿  main.cpp
+C:\Users\himch\Desktop\Source-HimanshuChawla\openGLBase\main.cpp(59,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\himch\Desktop\Source-HimanshuChawla\openGLBase\main.cpp(60,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\himch\Desktop\Source-HimanshuChawla\openGLBase\main.cpp(62,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\himch\Desktop\Source-HimanshuChawla\openGLBase\main.cpp(104): warning C4715: 'updateMousePicking': not all control paths return a value
+  openGLBase.vcxproj -> C:\Users\himch\Desktop\Source-HimanshuChawla\Debug\openGLBase.exe

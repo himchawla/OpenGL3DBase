@@ -1,0 +1,6 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  main.cpp
+D:\repos\OpenGL3DBase\openGL3DBase\main.cpp(51,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\main.cpp(52,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\main.cpp(54,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  openGL3DBase.vcxproj -> D:\repos\OpenGL3DBase\Debug\openGL3DBase.exe
