@@ -1,67 +1,54 @@
-
-//
-// Bachelor of Software Engineering
-// Media Design School
-// Auckland
-// New Zealand
-//
-// (c) 2019 Media Design School
-//
-// File Name 	: Camera.h
-// Description	: Class to add objects to world space
-// Author 		: Himanshu Chawla
-// Mail 		: Himanshu.Chawla@mds.ac.nz
-//
-
 #pragma once
 
+#include <functional>
+
+#include <glew.h>
 #include <glm.hpp>
-#include<gtc/matrix_transform.hpp>
-#include<gtc/type_ptr.hpp>
-#include<glew.h>
-#include<freeglut.h>
+#include <gtc/matrix_transform.hpp>
 
 
 class Camera
 {
-private:
-	glm::vec3 cameraLookDir;
-	glm::vec3 cameraUpDir;
-	glm::mat4 viewMat;
-	glm::mat4 projectionMat;
-	float screenWidth;
-	float screenHeight;
-	float timeElapsed;
-	float Rotation = 180.0f;
-
 public:
-	glm::mat4 getProjectionMat();
+	Camera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed = 10.0f, float rotationSpeed = 135.0f);
 
-	glm::mat4 getViewMat();
+	void setMoveSpeed(float moveSpeed);
+	void setRotationSpeed(float degreesPerSecond);
+	void setControls(int forwardKeyCode, int backwardKeyCode, int rotateLeftKeyCode, int rotateRightKeyCode);
 
-	//Constructor
-	Camera();
+	glm::mat4 getViewMatrix() const;
+	void update(const std::function<bool(int)>& keyInputFunc,
+	            const std::function<float(float)>& speedCorrectionFunc);
 
-	//Update CameraUpDir
-	
-	//Update function
-	void Update(float deltaTime);
+private:
+	void moveBy(float distance)
+	{
+		glm::vec3 vOffset = getNormalizedViewVector();
+		vOffset *= distance;
+		_position += vOffset;
+		_viewPoint += vOffset;
+	}
 
-	//returns projection * view mat
-	glm::mat4 getMat();
+	void rotateBy(float angleInDegrees)
+	{
+		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::vec4 rotatedViewVector = rotationMatrix * glm::vec4(getNormalizedViewVector(), 0.0f);
+		_viewPoint = _position + glm::vec3(rotatedViewVector.x, rotatedViewVector.y, rotatedViewVector.z);
+	}
 
-	//Projection matrix
-	glm::mat4 project(glm::mat4 modelMat);
+	glm::vec3 getNormalizedViewVector() const
+	{
+		return glm::normalize(_viewPoint - _position);
+	}
 
-	//returns PV matrix with no target, used for the skybox
-	glm::mat4 getPVM();
+	glm::vec3 _position;
+	glm::vec3 _viewPoint;
+	glm::vec3 _upVector;
 
-	glm::vec3 target;
-	glm::vec3 cameraFront;
-
-	glm::vec3 cameraPos;
-
-
-
+	float _moveSpeed;
+	float _rotationSpeed;
+	int _forwardKeyCode;
+	int _backwardKeyCode;
+	int _rotateLeftKeyCode;
+	int _rotateRightKeyCode;
 };
-
