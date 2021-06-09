@@ -45,6 +45,9 @@ void OpenGLWindow::runApp()
 	initializeScene();
 }
 
+
+Camera camera(glm::vec3(0.0f, 8.0f, 20.0f), glm::vec3(0.0f, 8.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+float rotationAngleRad;
 void OpenGLWindow::initializeScene()
 {
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);

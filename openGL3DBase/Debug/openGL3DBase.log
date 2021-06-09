@@ -1,18 +1,8 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Camera.cpp
   OpenGLWindow.cpp
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(36,26): error C2059: syntax error: 'constant'
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(37,13): error C2059: syntax error: 'constant'
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(37,31): error C2838: 'vec3': illegal qualified name in member declaration
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(38,13): error C2059: syntax error: 'constant'
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(38,30): error C2838: 'vec3': illegal qualified name in member declaration
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(38,30): error C2059: syntax error: ')'
+D:\repos\OpenGL\openGL3DBase\OpenGLWindow.cpp(19,1): error C2512: 'Camera': no appropriate default constructor available
+D:\repos\OpenGL\openGL3DBase\Camera.h(10,7): message : see declaration of 'Camera'
   Source.cpp
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(36,26): error C2059: syntax error: 'constant'
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(37,13): error C2059: syntax error: 'constant'
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(37,31): error C2838: 'vec3': illegal qualified name in member declaration
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(38,13): error C2059: syntax error: 'constant'
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(38,30): error C2838: 'vec3': illegal qualified name in member declaration
-D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(38,30): error C2059: syntax error: ')'
 D:\repos\OpenGL\openGL3DBase\Source.cpp(14,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
   Generating Code...

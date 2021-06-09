@@ -33,7 +33,6 @@ public:
 	void releaseScene();
 	void updateScene();
 	void handleInput();
-	Camera camera;
 	bool keyPressed(int keyCode);
 	bool keyPressedOnce(int keyCode);
 
