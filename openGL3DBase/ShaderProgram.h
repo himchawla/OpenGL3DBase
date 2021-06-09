@@ -12,6 +12,7 @@ public:
 	bool addShaderToProgram(const shader& _shader);
 	bool linkProgram();
 	void useProgram();
+	void unUseProgram();
 	void deleteProgram();
 
 	GLuint getShaderProgramID() const;

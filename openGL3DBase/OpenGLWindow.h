@@ -61,4 +61,5 @@ private:
 	float _lastFrameTimeFPS;
 	float _FPS;
 	float currentAngle = 0.0f;
+	Camera* camera;
 };

@@ -17,6 +17,17 @@ public:
 		addRawData((void*)&_ptrObj, sizeof(T), _repeat);
 	}
 
+	template<typename T>
+	void addUpload(const T&_ptrObj, int _pos, int _repeat = 1)
+	{
+		createVBO();
+		bindVBO();
+		addData(_ptrObj, _repeat);
+		uploadDataToGPU(GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(_pos);
+		glVertexAttribPointer(_pos, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	}
 
 	void* getRawDataPointer();
 	void uploadDataToGPU(GLenum _usageHint);

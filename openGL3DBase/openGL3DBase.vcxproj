@@ -21,23 +21,27 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Headers.h" />
-    <ClInclude Include="Object2D.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="OpenGLWindow.h" />
+    <ClInclude Include="Sampler.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="string_uttils.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Uniform.h" />
     <ClInclude Include="VertexBufferObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Object2D.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="OpenGLWindow.cpp" />
+    <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Uniform.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
   </ItemGroup>

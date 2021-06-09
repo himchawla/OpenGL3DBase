@@ -56,6 +56,11 @@ void ShaderProgram::useProgram()
     }
 }
 
+void ShaderProgram::unUseProgram()
+{
+    glUseProgram(0);
+}
+
 void ShaderProgram::deleteProgram()
 {
     if (!m_isLinked) {
