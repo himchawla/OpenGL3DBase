@@ -51,6 +51,9 @@
     <ClInclude Include="Sampler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenGLWindow.cpp">
@@ -86,12 +89,30 @@
     <ClCompile Include="Sampler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\vertex.vs">
+    <None Include="Resources\Shaders\vertex.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Resources\Shaders\fragment.fs">
+    <None Include="Resources\Shaders\fragment.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\Geometery.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\Geometery.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\Geometery.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\tess.tesc">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\tess.tese">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

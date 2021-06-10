@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Camera.h"
+#include "Terrain.h"
 
 class OpenGLWindow
 {
@@ -52,7 +53,8 @@ public:
 	bool hasErrorOccured();
 
 private:
-	
+
+	Terrain terrain;
 	bool _keyWasPressed[512];
 	bool _hasErrorOccured = false;
 	float _timeDelta;
@@ -62,4 +64,9 @@ private:
 	float _FPS;
 	float currentAngle = 0.0f;
 	Camera* camera;
+	Object cube1;
+	Object cube2;
+	Object star;
+	VertexBufferObject shapesVBO;
+	VertexBufferObject texCoordsVBO;
 };

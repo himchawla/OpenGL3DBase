@@ -30,7 +30,7 @@ void VertexBufferObject::bindVBO(GLenum _bufferType)
     glBindBuffer(m_bufferType, m_bufferID);
 }
 
-void VertexBufferObject::addRawData(void* _ptrData, uint32_t _dataSizeBytes, int _repeat)
+void VertexBufferObject::addRawData(const void* _ptrData, uint32_t _dataSizeBytes, int _repeat)
 {
     const auto bytesToAdd = _dataSizeBytes * _repeat;
     const auto requiredCapacity = _bytesAdded + bytesToAdd;

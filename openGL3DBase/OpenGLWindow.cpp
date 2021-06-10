@@ -2,21 +2,20 @@
 
 #include <iostream>
 #include <math.h>
+
 #include <gtc/matrix_transform.hpp>
 #include <gtc/quaternion.hpp>
 
-#include "Object.h"
 #include "Object3D.h"
+#include "Object.h"
 #include "ShaderProgram.h"
+#include "Terrain.h"
 #include "VertexBufferObject.h"
 
 
 shader vertexShader, fragmentShader;
 ShaderProgram mainProgram;
-Object cube1;
-Object cube2;
-VertexBufferObject shapesVBO;
-VertexBufferObject texCoordsVBO;
+
 GLuint mainVAO;
 
 OpenGLWindow::OpenGLWindow()
@@ -59,8 +58,8 @@ void OpenGLWindow::initializeScene()
 {
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-	vertexShader.loadShaderFromFile("Resources/Shaders/vertex.vs", GL_VERTEX_SHADER);
-	fragmentShader.loadShaderFromFile("Resources/Shaders/fragment.fs", GL_FRAGMENT_SHADER);
+	vertexShader.loadShaderFromFile("Resources/Shaders/vertex.vert", GL_VERTEX_SHADER);
+	fragmentShader.loadShaderFromFile("Resources/Shaders/fragment.frag", GL_FRAGMENT_SHADER);
 
 	
 	
@@ -81,36 +80,48 @@ void OpenGLWindow::initializeScene()
 	}
 	
 	
-	
+	glm::vec3 vertex[] = {
+		glm::vec3(0.5f,0.5f,0.5f)
+	};
 	
 	shapesVBO.addUpload(Object3D::cubeVertices, 0);
 
 	texCoordsVBO.addUpload(Object3D::cubeFaceColors, 1, 6);
 
-
-	cube1.init(vertexShader, fragmentShader, 0, shapesVBO, texCoordsVBO, camera);
+	terrain.init(camera);
+	terrain.setTexture("Resources/Texture/brick.png");
+	cube1.init(vertexShader, fragmentShader, 0, shapesVBO, texCoordsVBO, camera, &terrain);
 	cube1.setTexture("Resources/Texture/Rayman.png");
-	cube2.init(vertexShader, fragmentShader, 0, shapesVBO, texCoordsVBO, camera);
+	cube2.init(vertexShader, fragmentShader, 0, shapesVBO, texCoordsVBO, camera, &terrain);
 	cube2.setTexture("Resources/Texture/Rayman.png");
 	cube1.transform.position = glm::vec3();
 	cube2.transform.position = glm::vec3(4.0f, 0.0f, 0.0f);
+
+	star.init("Geometery.vert", "Geometery.frag", "Geometery.geom", camera, 1);
+	//star.setTexture("Resources/Texture/Red.png");
+	
+	camera->cube = &cube1;
 	
 	
 }
 
 void OpenGLWindow::renderScene()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_GEOMETRY_BIT);
 
-	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	//terrain.Render();
 	
-	
-	cube1.Render();
-	cube2.Render();
-	
-	glutSwapBuffers();
+	//glCullFace(GL_FRONT);
 
+	//cube1.Render();
+	//cube2.Render();
+	glDisable(GL_CULL_FACE);
+
+	star.RenderGeom();
+	glutSwapBuffers();
 }
 
 void OpenGLWindow::releaseScene()
@@ -140,9 +151,11 @@ void OpenGLWindow::updateScene()
 		_FPS = _nextFPS;
 		_nextFPS = 0;
 	}
-	cube1.transform.rotation = glm::vec3(0.0005f, 0.0005f, 0.0005f);
-	cube1.Update();
-	cube2.Update();
+	cube1.Update(_timeDelta);
+	cube1.move([this](int keyCode) {return this->keyPressed(keyCode); });
+	//cube2.Update(_timeDelta);
+	//cube1.velocity = glm::vec3(0.0f, -0.0008f, 0.0f);
+	star.Update(_timeDelta);
 
 	
 }

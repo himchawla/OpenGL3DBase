@@ -9,7 +9,7 @@ public:
 
 	void createVBO(glm::uint32_t _reserveSizeBytes = 0);
 	void bindVBO(GLenum _bufferType = GL_ARRAY_BUFFER);
-	void addRawData(void* _ptrData, uint32_t _dataSizeBytes, int _repeat = 1);
+	void addRawData(const void* _ptrData, uint32_t _dataSizeBytes, int _repeat = 1);
 
 	template<typename T>
 	void addData(const T& _ptrObj, int _repeat = 1)
@@ -18,12 +18,13 @@ public:
 	}
 
 	template<typename T>
-	void addUpload(const T&_ptrObj, int _pos, int _repeat = 1)
+	void addUpload(const T& _ptrObj, int _pos, int _repeat = 1)
 	{
 		createVBO();
 		bindVBO();
 		addData(_ptrObj, _repeat);
 		uploadDataToGPU(GL_STATIC_DRAW);
+		GL_ARRAY_BUFFER;
 
 		glEnableVertexAttribArray(_pos);
 		glVertexAttribPointer(_pos, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);

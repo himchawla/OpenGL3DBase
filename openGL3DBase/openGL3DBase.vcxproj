@@ -28,6 +28,7 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="string_uttils.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Uniform.h" />
     <ClInclude Include="VertexBufferObject.h" />
@@ -41,13 +42,19 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Uniform.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\fragment.fs" />
-    <None Include="Resources\Shaders\vertex.vs" />
+    <None Include="Resources\Shaders\fragment.frag" />
+    <None Include="Resources\Shaders\Geometery.frag" />
+    <None Include="Resources\Shaders\Geometery.geom" />
+    <None Include="Resources\Shaders\Geometery.vert" />
+    <None Include="Resources\Shaders\tess.tesc" />
+    <None Include="Resources\Shaders\tess.tese" />
+    <None Include="Resources\Shaders\vertex.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
