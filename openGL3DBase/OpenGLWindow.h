@@ -7,6 +7,7 @@
 
 #include "Camera.h"
 #include "Terrain.h"
+#include "FBO.h";
 
 class OpenGLWindow
 {

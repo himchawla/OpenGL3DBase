@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="FBO.h" />
     <ClInclude Include="Headers.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Object3D.h" />
@@ -35,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="OpenGLWindow.cpp" />
