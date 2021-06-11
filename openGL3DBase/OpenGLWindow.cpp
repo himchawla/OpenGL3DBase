@@ -127,8 +127,9 @@ void OpenGLWindow::renderScene()
 	//cube2.Render();
 	glDisable(GL_CULL_FACE);
 
+	//quad.quadLOD();
 	quad.RenderQuad();
-	//star.RenderGeom();
+	star.RenderGeom();
 	glutSwapBuffers();
 }
 
@@ -164,6 +165,7 @@ void OpenGLWindow::updateScene()
 	//cube2.Update(_timeDelta);
 	//cube1.velocity = glm::vec3(0.0f, -0.0008f, 0.0f);
 	star.Update(_timeDelta);
+
 
 	
 }

@@ -1,6 +1,7 @@
 #version 430 core
 uniform mat4  PVM;
 layout (quads, equal_spacing, ccw) in;
+
 void main()
 {
 	vec4 p1 = mix(gl_in[1].gl_Position,gl_in[0].gl_Position,gl_TessCoord.x); 

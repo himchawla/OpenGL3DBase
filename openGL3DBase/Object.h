@@ -2,7 +2,7 @@
 #include "shaderProgram.h"
 #include "VertexBufferObject.h"
 #include <gtc/matrix_transform.hpp>
-
+#include <glm.hpp>
 #include "Camera.h"
 #include "sampler.h"
 #include "Texture.h"
@@ -45,6 +45,7 @@ public:
 	void setGeomData(const T& _data);
 
 	Object();
+	void quadLOD();
 
 	void Update(float _dT);
 	void Render();

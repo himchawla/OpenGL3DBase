@@ -1,6 +1,7 @@
 #include "Object.h"
 
 #include "Camera.h"
+#include "Headers.h"
 #include "Terrain.h"
 
 void Object::move(const std::function<bool(int)>& keyInputFunc)
@@ -202,6 +203,37 @@ Object::Object()
 	transform.scale = glm::vec3(0.01f);
 }
 
+void Object::quadLOD()
+{
+	float distance = glm::length(transform.position - camera->getPosition());
+	if (distance > 200.0f)
+	{
+ 		program["gOuter"] = 2.0f;
+		program["gInner"] = 1.0f;
+	}
+
+	else if(distance >150.0f)
+	{
+		program["gOuter"] = 5.0f;
+		program["gInner"] = 3.0f;
+	}
+
+	else if(distance > 75.0f)
+	{
+		program["gOuter"] = 12.0f;
+		program["gInner"] = 6.0f;
+	}
+
+	else
+	{
+		program["gOuter"] = 16.0f;
+		program["gInner"] = 8.0f;
+	}
+
+
+
+}
+
 void Object::Update(float _dT)
 {
 	modelMatrix[3][0] = transform.position.x;
@@ -251,6 +283,7 @@ void Object::RenderQuad()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glm::mat4 model = glm::mat4();
 
+	quadLOD();
 	program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(1.0f)));
 
 	glBindVertexArray(mainVAO);

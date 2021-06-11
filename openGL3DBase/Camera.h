@@ -27,7 +27,10 @@ public:
 	glm::mat4 getViewMatrix() const;
 	void update(const std::function<bool(int)>& keyInputFunc,
 	            const std::function<float(float)>& speedCorrectionFunc);
-
+	glm::vec3 getPosition()
+	{
+		return _position;
+	}
 private:
 	void moveBy(float distance)
 	{
