@@ -67,6 +67,8 @@ private:
 	Object cube1;
 	Object cube2;
 	Object star;
+
+	Object quad;
 	VertexBufferObject shapesVBO;
 	VertexBufferObject texCoordsVBO;
 };

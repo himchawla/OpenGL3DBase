@@ -20,7 +20,7 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& viewPoint, const glm:
 	, _rotationSpeed(rotationSpeed)
 {
 	projectionMatrix = glm::perspective(45.0f, float(1000) / float(1000), 0.5f, 10000.0f);
-	flag = false;
+	flag = true;
 	setControls((int)'i', (int)'k', (int)'j', (int)'l', (int)',', (int)'.');
 }
 
@@ -73,6 +73,13 @@ void Camera::update(const std::function<bool(int)>& keyInputFunc, const std::fun
 			rotateBy(-speedCorrectionFunc(_rotationSpeed));
 		}
 	}
+
+	else if(quadFlag)
+	{
+		_position = glm::vec3(-2.90719509, 100.663536, -181.227371);
+		_viewPoint = glm::vec3(-2.24208665f, 100.195961f, -180.645126f);
+		quadFlag = false;
+	}
 	
 	if (keyInputFunc(_forwardKeyCode)) {
 		moveBy(speedCorrectionFunc(_moveSpeed));
@@ -102,5 +109,10 @@ void Camera::update(const std::function<bool(int)>& keyInputFunc, const std::fun
 	if(keyInputFunc(_resetKeyCode))
 	{
 		flag = false;
+	}
+
+	if(keyInputFunc('z'))
+	{
+		quadFlag = true;
 	}
 }

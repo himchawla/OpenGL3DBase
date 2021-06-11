@@ -115,5 +115,11 @@
     <None Include="Resources\Shaders\tess.tese">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Resources\Shaders\tess.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\tess.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

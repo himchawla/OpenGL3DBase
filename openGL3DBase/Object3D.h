@@ -16,6 +16,15 @@ namespace Object3D
    // Bottom face
    glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-0.5f, -0.5f, 0.5f),
 	};
+
+	glm::vec2 quadVertices[] = {
+		glm::vec2(0.0f, 1.0f), // Top-left point
+		glm::vec2(0.0f, 0.0f), // Bottom-left point
+		glm::vec2(1.0f, 1.0f), // Top-right point
+		glm::vec2(1.0f, 0.0f) // Bottom-right point
+
+	};
+	
     glm::vec2 cubeTexCoords[6] =
     {
         glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 0.0f),

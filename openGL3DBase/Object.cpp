@@ -7,19 +7,19 @@ void Object::move(const std::function<bool(int)>& keyInputFunc)
 {
 	if(keyInputFunc('w'))
 	{
-		transform.position.z += 0.01f;
+		transform.position.z += 0.1f;
 	}
 	if (keyInputFunc('s'))
 	{
-		transform.position.z -= 0.01f;
+		transform.position.z -= 0.1f;
 	}
 	if (keyInputFunc('a'))
 	{
-		transform.position.x += 0.01f;
+		transform.position.x += 0.1f;
 	}
 	if (keyInputFunc('d'))
 	{
-		transform.position.x -= 0.01f;
+		transform.position.x -= 0.1f;
 	}
 }
 
@@ -46,12 +46,62 @@ bool Object::init(std::string _vertPath, std::string _fragPath, Camera* _camera,
 		glBindVertexArray(mainVAO);
 	}
 	camera = _camera;
-	transform.position = (glm::vec3(6.0f, 1.0f, 0.0f));
+	/*transform.position = (glm::vec3(6.0f, 1.0f, 0.0f));
 
-	translate(modelMatrix, transform.position);
+	translate(modelMatrix, transform.position);*/
 
 	return true;
 }
+
+
+bool Object::initQuad(std::string _vertPath, std::string _fragPath, Camera* _camera, bool genVAO)
+{
+	vertexShader.loadShaderFromFile("Resources/Shaders/" + _vertPath, GL_VERTEX_SHADER);
+	fragmentShader.loadShaderFromFile("Resources/Shaders/" + _fragPath, GL_FRAGMENT_SHADER);
+	tcsShader.loadShaderFromFile("Resources/Shaders/tess.tesc", GL_TESS_CONTROL_SHADER);
+	tesShader.loadShaderFromFile("Resources/Shaders/tess.tese", GL_TESS_EVALUATION_SHADER);
+	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded() || !tcsShader.isLoaded() || !tesShader.isLoaded())
+	{
+		return false;
+	}
+	program.createProgram();
+	program.addShaderToProgram(vertexShader);
+	program.addShaderToProgram(fragmentShader);
+	program.addShaderToProgram(tcsShader);
+	program.addShaderToProgram(tesShader);
+	
+	if (!program.linkProgram())
+	{
+		return false;
+	}
+	if (genVAO)
+	{
+		glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
+		glBindVertexArray(mainVAO);
+	}
+	camera = _camera;
+
+	GLfloat points[] = { -1.0f, -1.0f, 0.0f,
+						  1.0f, -1.0f, 0.0f,
+					   	  1.0f, 1.0f, 0.0f,
+						 -1.0, 1.0, 0.0f ,
+						  1.0f, 1.0f, 0.0f,
+						 -1.0f, -1.0f, 0.0f, };
+
+	glPatchParameteri(GL_PATCH_VERTICES, 4);
+
+	shapesVBO.addUpload(points, 0);
+	transform.position = glm::vec3(200.0f, 5.0f, 0.0f);
+	modelMatrix = glm::translate(modelMatrix, transform.position);
+	transform.scale = glm::vec3(75.0f);
+	modelMatrix = glm::scale(modelMatrix, transform.scale);
+	transform.rotation.x = glm::radians(90.0f);
+	modelMatrix = glm::rotate(modelMatrix, transform.rotation.x, glm::vec3(1.0f,0.0f,0.0f));
+
+
+	return true;
+}
+
 
 bool Object::init(std::string _vertPath, std::string _fragPath,std::string _geomPath, Camera* _camera, bool genVAO)
 {
@@ -64,8 +114,8 @@ bool Object::init(std::string _vertPath, std::string _fragPath,std::string _geom
 	}
 	program.createProgram();
 	program.addShaderToProgram(vertexShader);
-	program.addShaderToProgram(geometeryShader);
 	program.addShaderToProgram(fragmentShader);
+	program.addShaderToProgram(geometeryShader);
 
 	if (!program.linkProgram())
 	{
@@ -76,10 +126,15 @@ bool Object::init(std::string _vertPath, std::string _fragPath,std::string _geom
 		glGenVertexArrays(1, &mainVAO); // Creates one Vertex Array Object
 		glBindVertexArray(mainVAO);
 	}
+
+	GLfloat points[] = { 0.0f,  0.0f, 0.0f, 1.0f, 0.0f, 0.0f };			//passing in 1 point
+
 	camera = _camera;
-	shapesVBO.addUpload(glm::vec3(0.5f,0.5f,0.5f), 0);
-	colorsVBO.addUpload(glm::vec3(1.0f, 0.0f, 0.0f), 1);
+	shapesVBO.addUpload(points, 0);
+	//colorsVBO.addUpload(glm::vec3(1.0f, 0.0f, 0.0f), 1);
 	transform.scale = glm::vec3(1.0f);
+	transform.position = glm::vec3(0.0f, 0.0f, 18.0f);
+	modelMatrix = glm::translate(modelMatrix, transform.position);
 	return true;
 }
 
@@ -107,7 +162,9 @@ bool Object::init(shader _vertex, shader _frag, GLuint _VAO, VertexBufferObject 
 	camera = _cam;
 	transform.scale = glm::vec3(1.0f);
 	terrain = _terrain;
+	_numVertices = 36;
 	return true;
+
 }
 
 void Object::setVertexAttributesPointers(int numVertices)
@@ -153,12 +210,12 @@ void Object::Update(float _dT)
 
 	if (terrain != nullptr)
 	{
-		std::cout << terrain->getRenderedHeightAtPosition(glm::vec3(512.0f, 0.0f, 512.0f), transform.position) << "\t" << transform.position.y << '\n';
+		std::cout << terrain->getRenderedHeightAtPosition(glm::vec3(256.0f, 0.0f, 128.0f), transform.position) << "\t" << transform.position.y << '\n';
 
-		if (transform.position.y < terrain->getRenderedHeightAtPosition(glm::vec3(512.0f), transform.position))
+		if (transform.position.y < terrain->getRenderedHeightAtPosition(glm::vec3(128.0f), transform.position))
 		{
-			transform.position.y = terrain->getRenderedHeightAtPosition(glm::vec3(512.0f), transform.position);
-			velocity.y = 0.0f;
+			transform.position.y = terrain->getRenderedHeightAtPosition(glm::vec3(128.0f), transform.position);
+			//velocity.y = 0.0f;
 		}
 		else
 		{
@@ -180,22 +237,39 @@ void Object::Render()
 		program.useProgram();
 		glBindVertexArray(mainVAO);
 		program["PVM"] = camera->Project(modelMatrix);
-		program["gSampler"] = 0;
+		//program["gSampler"] = 0;
 		texture.bind();
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, _numVertices);
+		glBindVertexArray(0);
 		program.unUseProgram();
 	}
+}
+
+void Object::RenderQuad()
+{
+	program.useProgram();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glm::mat4 model = glm::mat4();
+
+	program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(1.0f)));
+
+	glBindVertexArray(mainVAO);
+	glDrawArrays(GL_PATCHES, 0, 6);
+	glBindVertexArray(0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	program.unUseProgram();
 }
 
 void Object::RenderGeom()
 {
 	program.useProgram();
-	glBindVertexArray(mainVAO);
-	
-	program["PVM"] = (modelMatrix);
-	program["gSampler"] = 0;
+	glm::mat4 model = glm::mat4();
+	program["PVM"] =	camera->Project(glm::scale(model, glm::vec3(5.0f)));
+	//program["gSampler"] = 0;
 	//texture.bind();
-	glDrawArrays(GL_POINT, 0, 1);
+	glBindVertexArray(mainVAO);
+	glDrawArrays(GL_POINTS, 0, 1);
+	glBindVertexArray(0);
 	program.unUseProgram();
 }
 

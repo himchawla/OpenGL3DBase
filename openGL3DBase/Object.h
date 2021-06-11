@@ -30,6 +30,7 @@ public:
 
 	void move(const std::function<bool(int)>& keyInputFunc);
 	bool init(std::string _vertPath, std::string _fragPath, Camera* _camera, bool genVAO = true);
+	bool initQuad(std::string _vertPath, std::string _fragPath, Camera* _camera, bool genVAO);
 	bool init(std::string _vertPath, std::string _fragPath, std::string _geomPath, Camera* _camera, bool genVAO);
 	bool init(shader _vertex, shader _frag, GLuint _VAO, VertexBufferObject _shapes, VertexBufferObject _colors,
 	          Camera* _cam, Terrain* _terrain);
@@ -47,6 +48,7 @@ public:
 
 	void Update(float _dT);
 	void Render();
+	void RenderQuad();
 	void RenderGeom();
 
 	void setTexture(std::string _texture);
@@ -56,13 +58,18 @@ public:
 		return shapesVBO;
 	}
 
-
+	void setVerts(int numVertices)
+	{
+		_numVertices = numVertices;
+	}
 protected:
 	glm::mat4 modelMatrix;
 	Camera* camera;
 
 	GLuint mainVAO;
 
+	shader tesShader;
+	shader tcsShader;
 	shader geometeryShader;
 	shader vertexShader, fragmentShader;
 	ShaderProgram program;
@@ -73,4 +80,6 @@ protected:
 
 	Texture texture;
 
+private:
+	int _numVertices;
 };

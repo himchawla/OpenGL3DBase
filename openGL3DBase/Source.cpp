@@ -28,11 +28,11 @@ void mouseMove(int x, int y)
 void Update()
 {
 	win.updateScene();
+	win.renderScene();
 }
 
 void Render()
 {
-	win.renderScene();
 
 
 

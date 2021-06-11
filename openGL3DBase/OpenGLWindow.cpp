@@ -21,13 +21,13 @@ GLuint mainVAO;
 OpenGLWindow::OpenGLWindow()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(0.0f, 0.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
+	camera->setRotationSpeed(50.0f);
 }
 
 bool OpenGLWindow::createOpenGLWindow(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE | GLUT_GEOMETRY_VISUALIZE_NORMALS);
 	glutInitWindowPosition(50, 50);
 	glutInitWindowSize(1000, 1000);
 	glutCreateWindow("OpenGL Project");
@@ -101,6 +101,13 @@ void OpenGLWindow::initializeScene()
 	//star.setTexture("Resources/Texture/Red.png");
 	
 	camera->cube = &cube1;
+
+	quad.initQuad("tess.vert", "tess.frag", camera, true);
+
+	/*quad.GetVBO().addUpload(Object3D::quadVertices,0);
+	quad.transform.scale = glm::vec3(1.0f);
+	quad.setVerts(4);*/
+	
 	
 	
 }
@@ -108,19 +115,20 @@ void OpenGLWindow::initializeScene()
 void OpenGLWindow::renderScene()
 {
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClear(GL_GEOMETRY_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	//terrain.Render();
+	terrain.Render();
 	
-	//glCullFace(GL_FRONT);
+	glCullFace(GL_FRONT);
 
-	//cube1.Render();
+	cube1.Render();
 	//cube2.Render();
 	glDisable(GL_CULL_FACE);
 
-	star.RenderGeom();
+	quad.RenderQuad();
+	//star.RenderGeom();
 	glutSwapBuffers();
 }
 

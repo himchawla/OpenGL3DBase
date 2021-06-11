@@ -59,11 +59,11 @@ void Terrain::Render()
         return;
     }
     program.useProgram();
-    glCullFace(GL_FRONT_AND_BACK);
+    glCullFace(GL_BACK);
 	glBindVertexArray(mainVAO);
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(m_numVertices);
-    transform.position.x = 0.1f;
+    transform.position.x = 0.0f;
     program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(128.0f)));
     program["gSampler"] = 0;
     texture.bind();
@@ -141,7 +141,7 @@ float Terrain::getRenderedHeightAtPosition(const glm::vec3& renderSize, const gl
     const auto row = static_cast<int>(m_rows * (position.z + halfDepth) / renderSize.z);
     const auto column = static_cast<int>(m_columns * (position.x + halfWidth) / renderSize.x);
 
-    return (getHeight(row, column) * renderSize.y) - 100;
+    return getHeight(row, column) * renderSize.y;
 }
 
 
@@ -158,7 +158,7 @@ void Terrain::setUpVertices()
     {
         for (auto j = 0; j < m_columns; j++)
         {
-           
+			m_heightData[i][j] /= 10.0f;  
             const auto factorRow = static_cast<float>(i) / static_cast<float>(m_rows - 1);
             const auto factorColumn = static_cast<float>(j) / static_cast<float>(m_columns - 1);
             const auto& fVertexHeight = m_heightData[i][j];

@@ -52,8 +52,10 @@
     <None Include="Resources\Shaders\Geometery.frag" />
     <None Include="Resources\Shaders\Geometery.geom" />
     <None Include="Resources\Shaders\Geometery.vert" />
+    <None Include="Resources\Shaders\tess.frag" />
     <None Include="Resources\Shaders\tess.tesc" />
     <None Include="Resources\Shaders\tess.tese" />
+    <None Include="Resources\Shaders\tess.vert" />
     <None Include="Resources\Shaders\vertex.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
