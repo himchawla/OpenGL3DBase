@@ -69,7 +69,14 @@ private:
 	Object cube2;
 	Object star;
 
+	FBO frame;
 	Object quad;
 	VertexBufferObject shapesVBO;
 	VertexBufferObject texCoordsVBO;
+	ShaderProgram Program;
+	GLuint quadVAO;
+	shader postFragment;
+	shader postVert;
+	VertexBufferObject postVBO;
+	VertexBufferObject postColVBO;
 };

@@ -27,7 +27,7 @@ OpenGLWindow::OpenGLWindow()
 bool OpenGLWindow::createOpenGLWindow(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE | GLUT_GEOMETRY_VISUALIZE_NORMALS);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 	glutInitWindowPosition(50, 50);
 	glutInitWindowSize(1000, 1000);
 	glutCreateWindow("OpenGL Project");
@@ -61,8 +61,30 @@ void OpenGLWindow::initializeScene()
 	vertexShader.loadShaderFromFile("Resources/Shaders/vertex.vert", GL_VERTEX_SHADER);
 	fragmentShader.loadShaderFromFile("Resources/Shaders/fragment.frag", GL_FRAGMENT_SHADER);
 
+	Program.createProgram();
+	postFragment.loadShaderFromFile("Resources/Shaders/postProcessing.frag", GL_FRAGMENT_SHADER);
+	postVert.loadShaderFromFile("Resources/Shaders/postProcessing.vert", GL_VERTEX_SHADER);
+	Program.addShaderToProgram(postVert);
+	Program.addShaderToProgram(postFragment);
+	Program.linkProgram();
+	glGenVertexArrays(1, &quadVAO);
+	glBindVertexArray(quadVAO);
+
+	GLfloat points[] = { -1.0f, -1.0f, 0.0f,
+						  1.0f, -1.0f, 0.0f,
+						  1.0f, 1.0f, 0.0f,
+						 -1.0, 1.0, 0.0f ,
+						  1.0f, 1.0f, 0.0f,
+						 -1.0f, -1.0f, 0.0f, };
+	GLfloat coords[] = {
+	0, 0, 0,
+	0, 1, 0,
+	1, 0, 0,
+	1, 1, 0
+	};
 	
-	
+	postVBO.addUpload(points, 0);
+	postColVBO.addUpload(coords, 1);
 	if (!vertexShader.isLoaded() || !fragmentShader.isLoaded())
 	{
 		closeWindow(true);
@@ -107,30 +129,51 @@ void OpenGLWindow::initializeScene()
 	/*quad.GetVBO().addUpload(Object3D::quadVertices,0);
 	quad.transform.scale = glm::vec3(1.0f);
 	quad.setVerts(4);*/
-	
+
+	frame.addUpload();
 	
 	
 }
 
 void OpenGLWindow::renderScene()
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	 //frame.bindFBO();
+	glBindFramebuffer(GL_FRAMEBUFFER, frame.m_frameBuffer);
+	glEnable(GL_DEPTH_TEST); // Depth is enabled to capture it
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	terrain.Render();
 	
-	glCullFace(GL_FRONT);
+	terrain.Render();
 
+	
 	cube1.Render();
 	//cube2.Render();
-	glDisable(GL_CULL_FACE);
-
+	
 	//quad.quadLOD();
 	quad.RenderQuad();
 	star.RenderGeom();
+
+	
+	//glutSwapBuffers();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST); //screenspace quad so depth is not required
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	Program.useProgram();
+	glActiveTexture(GL_TEXTURE0); std::cout<<(float)glutGet(GLUT_ELAPSED_TIME)<<'\n';
+	Program["iTime"] = (float)glutGet(GLUT_ELAPSED_TIME) / 1000000.0f;
+	//glBindRenderbuffer(GL_RENDERBUFFER, frame.m_frameBuffer);
+	
+	
+	Program["gSampler"] = 0;
+	Program["MVP"] = glm::scale(glm::mat4(), glm::vec3(2.0f));
+	glBindVertexArray(quadVAO);
+	glBindTexture(GL_TEXTURE_2D, frame.m_renderTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+
 	glutSwapBuffers();
+	
 }
 
 void OpenGLWindow::releaseScene()

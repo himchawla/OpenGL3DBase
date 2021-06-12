@@ -11,7 +11,7 @@ uniform sampler2D gSampler;
 void main()
 {
 	// distance from center of image, used to adjust blur
-	vec2 uv = fragCoord.xy / vec2(1000.0f,1000.0f);
+	vec2 uv = fragCoord.xy;
 	float d = length(uv - vec2(0.5,0.5));
 	
 	// blur amount

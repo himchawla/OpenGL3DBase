@@ -1,5 +1,4 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Object.cpp
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   OpenGLWindow.cpp
-  Generating Code...
-  openGL3DBase.vcxproj -> D:\Users\mds00001xo\Documents\GitHub\OpenGL3DBase\Debug\openGL3DBase.exe
+D:\repos\OpenGL\openGL3DBase\OpenGLWindow.h(10,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  openGL3DBase.vcxproj -> D:\repos\OpenGL\Debug\openGL3DBase.exe

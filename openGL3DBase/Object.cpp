@@ -242,7 +242,7 @@ void Object::Update(float _dT)
 
 	if (terrain != nullptr)
 	{
-		std::cout << terrain->getRenderedHeightAtPosition(glm::vec3(256.0f, 0.0f, 128.0f), transform.position) << "\t" << transform.position.y << '\n';
+		//std::cout << terrain->getRenderedHeightAtPosition(glm::vec3(256.0f, 0.0f, 128.0f), transform.position) << "\t" << transform.position.y << '\n';
 
 		if (transform.position.y < terrain->getRenderedHeightAtPosition(glm::vec3(128.0f), transform.position))
 		{
@@ -269,7 +269,7 @@ void Object::Render()
 		program.useProgram();
 		glBindVertexArray(mainVAO);
 		program["PVM"] = camera->Project(modelMatrix);
-		//program["gSampler"] = 0;
+		program["gSampler"] = 0;
 		texture.bind();
 		glDrawArrays(GL_TRIANGLES, 0, _numVertices);
 		glBindVertexArray(0);

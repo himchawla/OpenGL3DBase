@@ -6,6 +6,7 @@
 
 class FBO
 {
+public:
 	void createFBO(glm::uint32_t _reserveSizeBytes = 0);
 
 	void createRenderTexture(glm::uint32_t _reserveSizeBytes = 0)
@@ -16,8 +17,8 @@ class FBO
 			return;
 		}
 
-		glGenBuffers(1, &m_renderTexture);
-		m_rawData.reserve(_reserveSizeBytes > 0 ? _reserveSizeBytes : 1024);
+		glGenTextures(1, &m_renderTexture);
+		//m_rawData.reserve(_reserveSizeBytes > 0 ? _reserveSizeBytes : 1024);
 
 		m_isRenderBufferCreated = true;
 	}
@@ -32,7 +33,7 @@ class FBO
 		}
 
 		m_renderBufferType = _bufferType;
-		glBindBuffer(m_renderBufferType, m_renderTexture);
+		glBindTexture(m_renderBufferType, m_renderTexture);
 	}
 	void AllocateImage()
 	{
@@ -43,36 +44,14 @@ class FBO
 		}
 
 		glTexImage2D(m_renderBufferType, 0, GL_RGB, 1000, 1000, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glGenerateMipmap;
+		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	void AttachTexture()
 	{
 		glFramebufferTexture2D(m_bufferType, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_renderTexture, 0);
 	}
-	void bindFBO(GLenum _bufferType = GL_FRAMEBUFFER)
-	{
-		if (!m_isBufferCreated)
-		{
-			std::cerr << "This buffer is not created yet! You cannot bind it before you create it!" << std::endl;
-			return;
-		}
-		m_bufferType = _bufferType;
-		glBindBuffer(m_bufferType, m_frameBuffer);
-	}
-	
-	
-	void addUpload()
-	{
-		createRenderTexture();
-		BindRenderTexture();
-		AllocateImage();
-		
-		createFBO();
-		bindFBO();
-		AttachTexture();
-		RBO();
-		
-	}
+
+
 
 	void RBO()
 	{
@@ -81,7 +60,7 @@ class FBO
 		glBindRenderbuffer(GL_RENDERBUFFER, m_rbo);
 		glRenderbufferStorage(GL_RENDERBUFFER, // must be
 			GL_DEPTH24_STENCIL8, //use as depth - stencil buffer
-			1000, 1000);
+			1280, 720);
 		//viewport width and height;
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, //target
 				GL_DEPTH_STENCIL_ATTACHMENT, //attachment
@@ -93,14 +72,20 @@ class FBO
 	{
 
 	}
-	
 
-private:
-	GLuint m_frameBuffer = 0;
+	void addUpload();
+	void bindFBO(GLenum _bufferType = GL_FRAMEBUFFER);
+	GLuint getTexture()
+	{
+		return m_renderTexture;
+	}
 	GLuint m_renderTexture;
 	GLuint m_rbo;
 	int m_bufferType;
 	GLuint m_renderBufferType;
+
+	GLuint m_frameBuffer = 0;
+private:
 	uint32_t m_uploadedDataSize;
 	uint32_t _bytesAdded = 0;
 	std::vector<unsigned char> m_rawData;
