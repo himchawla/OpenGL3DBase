@@ -2,6 +2,8 @@
 
 #include <stb_image.h>
 
+#include "Headers.h"
+
 Terrain::Terrain()
 		:Object()
 {
@@ -11,20 +13,21 @@ Terrain::Terrain()
 void Terrain::init(Camera* _cam)
 {
     Object::init("vertex.vert", "fragment.frag", _cam, 0);
-    createFromHeightData(getHeightDataFromImage("Resources/Texture/heightmap.png"));
+    createFromHeightData();
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
     modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
 }
 
-void Terrain::createFromHeightData(const std::vector<std::vector<float>>& _heightData)
+void Terrain::createFromHeightData()
 {
     if (m_isInitialized) {
         shapesVBO.deleteVBO();
     }
 
-    m_heightData = _heightData;
-    m_rows = static_cast<int>(_heightData.size());
-    m_columns = static_cast<int>(_heightData[0].size());
+	m_heightData.resize(20);
+	FOR(i, 20) m_heightData[i].resize(20);
+    m_rows = static_cast<int>(m_heightData.size());
+    m_columns = static_cast<int>(m_heightData[0].size());
     m_numVertices = m_rows * m_columns;
 
     // First, prepare VAO and VBO for vertex data
@@ -68,7 +71,7 @@ void Terrain::Render()
     program["gSampler"] = 0;
     texture.bind();
 
-    glDrawElements(GL_TRIANGLE_STRIP, m_numIndices, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_POINTS, m_numIndices, GL_UNSIGNED_INT, 0);
     glDisable(GL_PRIMITIVE_RESTART);
 }
 
@@ -158,7 +161,8 @@ void Terrain::setUpVertices()
     {
         for (auto j = 0; j < m_columns; j++)
         {
-			m_heightData[i][j] /= 10.0f;  
+			if ((i == 7 || i == 8) && j == 0) m_heightData[i][j] = 10.0f;
+			else m_heightData[i][j] = 0.0f;
             const auto factorRow = static_cast<float>(i) / static_cast<float>(m_rows - 1);
             const auto factorColumn = static_cast<float>(j) / static_cast<float>(m_columns - 1);
             const auto& fVertexHeight = m_heightData[i][j];
@@ -166,6 +170,8 @@ void Terrain::setUpVertices()
         }
         shapesVBO.addRawData(m_vertices[i].data(), m_columns * sizeof(glm::vec3));
     }
+
+	
 }
 
 void Terrain::setUpTextureCoordinates()
@@ -268,7 +274,10 @@ void Terrain::setUpIndexBuffer()
             {
                 const auto row = i + k;
                 auto index = row * m_columns + j;
-                indexVBO.addRawData(&index, sizeof(int));
+
+
+
+            	indexVBO.addRawData(&index, sizeof(int));
             }
         }
         // Restart triangle strips

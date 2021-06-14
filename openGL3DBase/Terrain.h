@@ -34,7 +34,7 @@ public:
 	Terrain();
 	
 	void init(Camera* _cam);
-	void createFromHeightData(const std::vector <std::vector<float>>& _heightData);
+	void createFromHeightData();
 
 	void Render();
 	void RenderPoints();
