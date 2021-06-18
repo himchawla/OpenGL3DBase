@@ -242,18 +242,7 @@ void Object::Update(float _dT)
 
 	if (terrain != nullptr)
 	{
-		std::cout << terrain->getRenderedHeightAtPosition(glm::vec3(256.0f, 0.0f, 128.0f), transform.position) << "\t" << transform.position.y << '\n';
-
-		if (transform.position.y < terrain->getRenderedHeightAtPosition(glm::vec3(128.0f), transform.position))
-		{
-			transform.position.y = terrain->getRenderedHeightAtPosition(glm::vec3(128.0f), transform.position);
-			//velocity.y = 0.0f;
-		}
-		else
-		{
-			velocity.y = -0.01f;
-		}
-
+		
 	}
 	transform.position += velocity * _dT;
 	modelMatrix = glm::rotate(modelMatrix, transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));

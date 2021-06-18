@@ -24,6 +24,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="OpenGLWindow.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="OpenGLWindow.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

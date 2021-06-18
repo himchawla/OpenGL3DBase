@@ -1,30 +1,11 @@
 #pragma once
 #include "Object.h"
+#include "Particle.h"
 class Terrain :
     public Object
 {
 public:
-	struct HillAlgorithmParameters
-	{
-		HillAlgorithmParameters(int rows, int columns, int numHills, int hillRadiusMin, int hillRadiusMax, float hillMinHeight, float hillMaxHeight)
-		{
-			this->rows = rows;
-			this->columns = columns;
-			this->numHills = numHills;
-			this->hillRadiusMin = hillRadiusMin;
-			this->hillRadiusMax = hillRadiusMax;
-			this->hillMinHeight = hillMinHeight;
-			this->hillMaxHeight = hillMaxHeight;
-		}
-
-		int rows;
-		int columns;
-		int numHills;
-		int hillRadiusMin;
-		int hillRadiusMax;
-		float hillMinHeight;
-		float hillMaxHeight;
-	};
+	
 
 	int getVertexByteSize()
 	{
@@ -37,16 +18,14 @@ public:
 	void createFromHeightData();
 
 	void Render();
+	void Update(float _dT);
 	void RenderPoints();
-	std::vector<std::vector<float>> getHeightDataFromImage(const std::string& fileName);
 
 	int getRows() const;
 	int getColumns() const;
 	float getHeight(const int _row, const int _column) const;
 
-	static std::vector <std::vector<float>> generateRandomHeightData(const HillAlgorithmParameters& params);
 
-	float getRenderedHeightAtPosition(const glm::vec3& renderSize, const glm::vec3& position);
 
 private:
 	void setUpVertices();
@@ -57,7 +36,7 @@ private:
 	glm::mat3 normalMatrix;
 	
 	std::vector <std::vector<float>> m_heightData;
-	std::vector <std::vector<glm::vec3>> m_vertices;
+	std::vector <std::vector<Particle>> m_vertices;
 	std::vector <std::vector<glm::vec2>> m_textureCoordinates;
 	std::vector <std::vector<glm::vec3>> m_normals;
 	int m_rows = 0;
@@ -65,5 +44,5 @@ private:
 	bool m_isInitialized = false;
 	int m_numVertices;
 	int m_numIndices = 0;
+	bool flag;
 };
-

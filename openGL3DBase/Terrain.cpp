@@ -16,7 +16,9 @@ void Terrain::init(Camera* _cam)
     createFromHeightData();
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
     modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
+    flag = false;
 }
+
 
 void Terrain::createFromHeightData()
 {
@@ -36,11 +38,16 @@ void Terrain::createFromHeightData()
     shapesVBO.createVBO(m_numVertices * getVertexByteSize()); // Preallocate memory
     shapesVBO.bindVBO();
     setUpVertices();
+    for (auto i = 0; i < m_rows; i++)
+    {
+        shapesVBO.addRawData(m_vertices[i].data(), m_columns * sizeof(glm::vec3));
+    }
     setUpTextureCoordinates();
     setUpNormals();
 
     // Send data to GPU, they're ready now
     shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
+    shapesVBO.unmapBuffer();
 
     setVertexAttributesPointers(m_numVertices);
 
@@ -48,9 +55,15 @@ void Terrain::createFromHeightData()
     setUpIndexBuffer();
 
     // Clear the data, we won't need it anymore
-    m_vertices.clear();
+    //m_vertices.clear();
     m_textureCoordinates.clear();
     m_normals.clear();
+    m_vertices[0][0].m_accelaration = glm::vec3();
+    m_vertices[0][4].m_accelaration = glm::vec3();
+    m_vertices[0][9].m_accelaration = glm::vec3();
+    m_vertices[0][14].m_accelaration = glm::vec3();
+    m_vertices[0][19].m_accelaration = glm::vec3();
+    
 
     // If get here, we have succeeded with generating heightmap
     m_isInitialized = true;
@@ -61,7 +74,34 @@ void Terrain::Render()
     if (!m_isInitialized) {
         return;
     }
-    program.useProgram();
+   FOR(i, 20)
+    {
+	    FOR(j, 20)
+	    {
+            m_vertices[i][j].Integrate(0.00001f);
+            
+	    }
+    }
+    //m_vertices[0][6].m_position.y += 0.0002f;
+	//m_vertices[0][7].y = 1.0f;*/
+   // shapesVBO.createVBO(m_numVertices * getVertexByteSize()); // Preallocate memory
+    
+    shapesVBO.bindVBO();
+    //setUpVertices();
+    for (auto i = 0; i < m_rows; i++)
+    {
+        std::vector<glm::vec3>temp;
+        temp.resize(20);
+        FOR(j, 20) temp[j] = m_vertices[i][j].m_position;
+        shapesVBO.addRawData(temp.data(), m_columns * sizeof(glm::vec3));
+    }
+    setUpTextureCoordinates();
+    setUpNormals();
+
+    // Send data to GPU, they're ready now
+    shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
+    shapesVBO.unmapBuffer();
+	program.useProgram();
     glCullFace(GL_BACK);
 	glBindVertexArray(mainVAO);
     glEnable(GL_PRIMITIVE_RESTART);
@@ -71,10 +111,40 @@ void Terrain::Render()
     program["gSampler"] = 0;
     texture.bind();
 
-    glDrawElements(GL_POINTS, m_numIndices, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_LINE_LOOP, m_numIndices, GL_UNSIGNED_INT, 0);
     glDisable(GL_PRIMITIVE_RESTART);
 }
 
+
+void Terrain::Update(float _dT)
+{
+	AFOR(i, m_vertices)
+	{
+		AFOR(j, i)
+		{
+           
+            //j.Integrate(_dT);
+		}
+	}
+
+    AFOR(i, m_vertices)
+    {
+        AFOR(j, i)
+        {
+            j.m_position += glm::vec3(0.0f, (flag)? 2.0f: -2.0f, 0.0f);
+        }
+    }
+
+    flag = !flag;
+
+    m_vertices[0][0].m_accelaration = glm::vec3(0.0);
+    m_vertices[0][4].m_accelaration = glm::vec3(0.0);
+    m_vertices[0][9].m_accelaration = glm::vec3(0.0);
+    m_vertices[0][14].m_accelaration = glm::vec3(0.0);
+    m_vertices[0][19].m_accelaration = glm::vec3(0.0);
+
+	
+}
 
 void Terrain::RenderPoints()
 {
@@ -85,36 +155,10 @@ void Terrain::RenderPoints()
     glBindVertexArray(mainVAO);
 
     // Render points only
-    glDrawArrays(GL_POINTS, 0, m_numVertices);
+    glDrawArrays(GL_LINES, 0, m_numVertices);
 }
 
 
-std::vector<std::vector<float>> Terrain::getHeightDataFromImage(const std::string& fileName)
-{
-    stbi_set_flip_vertically_on_load(1);
-    int width, height, bytesPerPixel;
-    const auto imageData = stbi_load(fileName.c_str(), &width, &height, &bytesPerPixel, 0);
-    if (imageData == nullptr)
-    {
-        // Return empty vector in case of failure
-        std::cout << "Failed to load heightmap image " << fileName << "!" << std::endl;
-        return std::vector<std::vector<float>>();
-    }
-
-    std::vector<std::vector<float>> result(height, std::vector<float>(width));
-    auto pixelPtr = &imageData[0];
-    for (auto i = 0; i < height; i++)
-    {
-        for (auto j = 0; j < width; j++)
-        {
-            result[i][j] = static_cast<float>(*pixelPtr) / 255.0f;
-            pixelPtr += bytesPerPixel;
-        }
-    }
-
-    stbi_image_free(imageData);
-    return result;
-}
 
 
 int Terrain::getRows() const
@@ -136,42 +180,25 @@ float Terrain::getHeight(const int _row, const int _column) const
     return m_heightData[_row][_column];
 }
 
-float Terrain::getRenderedHeightAtPosition(const glm::vec3& renderSize, const glm::vec3& position)
-{
-    const auto halfWidth = renderSize.x / 2.0f;
-    const auto halfDepth = renderSize.z / 2.0f;
 
-    const auto row = static_cast<int>(m_rows * (position.z + halfDepth) / renderSize.z);
-    const auto column = static_cast<int>(m_columns * (position.x + halfWidth) / renderSize.x);
-
-    return getHeight(row, column) * renderSize.y;
-}
-
-
-std::vector<std::vector<float>> Terrain::generateRandomHeightData(const HillAlgorithmParameters& params)
-{
-    return std::vector<std::vector<float>>();
-}
 
 void Terrain::setUpVertices()
 {
-    m_vertices = std::vector<std::vector<glm::vec3>>(m_rows, std::vector<glm::vec3>(m_columns));
-
+    m_vertices.resize(20);
+    FOR(i, 20)   m_vertices[i].resize(20);
     for (auto i = 0; i < m_rows; i++)
     {
         for (auto j = 0; j < m_columns; j++)
         {
-			if ((i == 7 || i == 8) && j == 0) m_heightData[i][j] = 10.0f;
-			else m_heightData[i][j] = 0.0f;
+			//if ((i == 7 || i == 8) && j == 0) m_heightData[i][j] = 10.0f;
+			//else
+                m_heightData[i][j] = 0.0f;
             const auto factorRow = static_cast<float>(i) / static_cast<float>(m_rows - 1);
             const auto factorColumn = static_cast<float>(j) / static_cast<float>(m_columns - 1);
             const auto& fVertexHeight = m_heightData[i][j];
-            m_vertices[i][j] = glm::vec3(-0.5f + factorColumn, fVertexHeight, -0.5f + factorRow);
+            m_vertices[i][j].m_position = glm::vec3(-0.5f + factorColumn, fVertexHeight, -0.5f + factorRow);
         }
-        shapesVBO.addRawData(m_vertices[i].data(), m_columns * sizeof(glm::vec3));
-    }
-
-	
+    }	
 }
 
 void Terrain::setUpTextureCoordinates()
@@ -202,10 +229,10 @@ void Terrain::setUpNormals()
     {
         for (auto j = 0; j < m_columns - 1; j++)
         {
-            const auto& vertexA = m_vertices[i][j];
-            const auto& vertexB = m_vertices[i][j + 1];
-            const auto& vertexC = m_vertices[i + 1][j + 1];
-            const auto& vertexD = m_vertices[i + 1][j];
+            const auto& vertexA = m_vertices[i][j].m_position;
+            const auto& vertexB = m_vertices[i][j + 1].m_position;
+            const auto& vertexC = m_vertices[i + 1][j + 1].m_position;
+            const auto& vertexD = m_vertices[i + 1][j].m_position;
 
             const auto triangleNormalA = glm::cross(vertexB - vertexA, vertexA - vertexD);
             const auto triangleNormalB = glm::cross(vertexD - vertexC, vertexC - vertexB);

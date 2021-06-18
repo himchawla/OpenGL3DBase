@@ -150,11 +150,7 @@ void OpenGLWindow::updateScene()
 		_FPS = _nextFPS;
 		_nextFPS = 0;
 	}
-	cube1.Update(_timeDelta);
-	cube1.move([this](int keyCode) {return this->keyPressed(keyCode); });
-	//cube2.Update(_timeDelta);
-	//cube1.velocity = glm::vec3(0.0f, -0.0008f, 0.0f);
-	star.Update(_timeDelta);
+	terrain.Update(_timeDelta);
 
 
 	
