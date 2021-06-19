@@ -151,6 +151,7 @@ void OpenGLWindow::updateScene()
 		_nextFPS = 0;
 	}
 	terrain.Update(_timeDelta);
+	terrain.move([this](int keyCode) {return this->keyPressed(keyCode); });
 
 
 	

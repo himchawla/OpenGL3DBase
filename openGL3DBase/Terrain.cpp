@@ -74,14 +74,7 @@ void Terrain::Render()
     if (!m_isInitialized) {
         return;
     }
-   FOR(i, 20)
-    {
-	    FOR(j, 20)
-	    {
-            m_vertices[i][j].Integrate(0.00001f);
-            
-	    }
-    }
+  
     //m_vertices[0][6].m_position.y += 0.0002f;
 	//m_vertices[0][7].y = 1.0f;*/
    // shapesVBO.createVBO(m_numVertices * getVertexByteSize()); // Preallocate memory
@@ -103,16 +96,51 @@ void Terrain::Render()
     shapesVBO.unmapBuffer();
 	program.useProgram();
     glCullFace(GL_BACK);
-	glBindVertexArray(mainVAO);
-    glEnable(GL_PRIMITIVE_RESTART);
-    glPrimitiveRestartIndex(m_numVertices);
+	//glBindVertexArray(mainVAO);
+   /* glEnable(GL_PRIMITIVE_RESTART);
+    glPrimitiveRestartIndex(m_numVertices);*/
     transform.position.x = 0.0f;
     program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(128.0f)));
     program["gSampler"] = 0;
-    texture.bind();
-
-    glDrawElements(GL_LINE_LOOP, m_numIndices, GL_UNSIGNED_INT, 0);
+   /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glDrawElements(GL_TRIANGLE_STRIP, m_numIndices, GL_UNSIGNED_INT, 0);
     glDisable(GL_PRIMITIVE_RESTART);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
+
+	SFOR(i, 1, 18, 1)
+	{
+		SFOR(j, 1, 18, 1)
+		{
+			texture.bind();
+            m_vertices[i][j].RenderSolid();
+		}
+	}
+
+    //m_vertices[5][5].RenderSolid();
+
+	
+}
+
+
+void Terrain::move(const std::function<bool(int)>& keyInputFunc)
+{
+	if(keyInputFunc('w'))
+	{
+        m_vertices[5][5].right = nullptr;
+        m_vertices[6][5].left = nullptr;
+		/*m_vertices[5][5].bottom = nullptr;
+        m_vertices[5][5].top = nullptr;*/
+       
+        //FOR(i, 20) FOR(j, 20)
+        //{
+	       // m_vertices[i][j].top = nullptr;
+	       // m_vertices[i][j].left = nullptr;
+	       // m_vertices[i][j].bottom = nullptr;
+	       // m_vertices[i][j].right = nullptr;
+        //}
+       //
+       // m_vertices[2][2].left = nullptr;
+	}
 }
 
 
@@ -131,7 +159,7 @@ void Terrain::Update(float _dT)
     {
         AFOR(j, i)
         {
-            j.m_position += glm::vec3(0.0f, (flag)? 2.0f: -2.0f, 0.0f);
+            //j.m_position += glm::vec3(0.0f, (flag)? 2.0f: -2.0f, 0.0f);
         }
     }
 
@@ -192,13 +220,22 @@ void Terrain::setUpVertices()
         {
 			//if ((i == 7 || i == 8) && j == 0) m_heightData[i][j] = 10.0f;
 			//else
-                m_heightData[i][j] = 0.0f;
+            m_heightData[i][j] = 0.0f;
             const auto factorRow = static_cast<float>(i) / static_cast<float>(m_rows - 1);
             const auto factorColumn = static_cast<float>(j) / static_cast<float>(m_columns - 1);
             const auto& fVertexHeight = m_heightData[i][j];
             m_vertices[i][j].m_position = glm::vec3(-0.5f + factorColumn, fVertexHeight, -0.5f + factorRow);
+           
         }
-    }	
+    }
+
+	FOR(i,20)
+    {
+	    FOR(j,20)
+	    {
+            m_vertices[i][j].init(&m_vertices, i, j);
+	    }
+    }
 }
 
 void Terrain::setUpTextureCoordinates()

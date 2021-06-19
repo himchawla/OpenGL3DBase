@@ -18,6 +18,7 @@ public:
 	void createFromHeightData();
 
 	void Render();
+	void move(const std::function<bool(int)>& keyInputFunc);
 	void Update(float _dT);
 	void RenderPoints();
 

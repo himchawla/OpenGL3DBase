@@ -22,7 +22,7 @@ using namespace std;
 
 #define FOR(q,n) for(int q=0;q<n;q++)
 #define SFOR(q,s,e, in) for(auto q=s;q<=e;q+=in)
-#define AFOR(q,n) for(auto q:n)
+#define AFOR(q,n) for(auto& q:n)
 #define RFOR(q,n) for(int q=n;q>=0;q--)
 #define RSFOR(q,s,e, in) for(auto q=s;q>=e;q-=in)
 

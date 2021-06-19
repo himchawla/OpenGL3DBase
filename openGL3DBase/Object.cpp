@@ -6,22 +6,7 @@
 
 void Object::move(const std::function<bool(int)>& keyInputFunc)
 {
-	if(keyInputFunc('w'))
-	{
-		transform.position.z += 0.1f;
-	}
-	if (keyInputFunc('s'))
-	{
-		transform.position.z -= 0.1f;
-	}
-	if (keyInputFunc('a'))
-	{
-		transform.position.x += 0.1f;
-	}
-	if (keyInputFunc('d'))
-	{
-		transform.position.x -= 0.1f;
-	}
+	
 }
 
 bool Object::init(std::string _vertPath, std::string _fragPath, Camera* _camera, bool genVAO)

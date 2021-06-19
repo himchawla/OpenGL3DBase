@@ -1,10 +1,624 @@
 #pragma once
+#include <glew.h>
 #include <glm.hpp>
 #include <iostream>
+#include <vector>
 
 class Particle
 {
 public:
+
+	struct vertex
+	{
+		vertex(glm::vec3 _v)
+		{
+			x = _v.x;
+			y = _v.y;
+			z = _v.z;
+		}
+		vertex(float _x, float _y, float _z)
+		{
+			x = _x;
+			y = _y;
+			z = _z;
+		}
+		GLfloat x, y, z;
+	};
+
+	std::vector<std::vector<Particle>>* m_vertices;
+
+	int m_z;
+
+	int m_x;
+
+	GLuint EBO;
+
+	void init(std::vector <std::vector<Particle>> *_vertices, int x, int z)
+	{
+		m_x = x;
+		m_z = z;
+		m_vertices = _vertices;
+		if(x > 0)
+		{
+			left = &(*_vertices)[x - 1][z];
+		}
+		if(x < 19)
+		{
+			right = &(*_vertices)[x + 1][z];
+		}
+
+		if(z > 0)
+		{
+			top = &(*_vertices)[x][z - 1];
+		}
+		if (z < 19)
+		{
+			bottom = &(*_vertices)[x][z + 1];
+		}
+
+		std::vector<vertex> verts;
+
+		if (top != nullptr)
+			verts.push_back(vertex(top->m_position));
+		if (bottom != nullptr)
+			verts.push_back(vertex(bottom->m_position));
+			verts.push_back(m_position);
+		if (left != nullptr)
+			verts.push_back(vertex(left->m_position));
+		if (right != nullptr)
+			verts.push_back(vertex(right->m_position));
+
+		if (top && bottom && right && left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+			};
+
+			
+			glGenVertexArrays(1, &VAO);
+			glBindVertexArray(VAO);
+			
+			glGenBuffers(1, &VBO);
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+			glEnableVertexAttribArray(0);
+
+			
+		}
+		if (top && bottom && right && left)
+		{
+			
+		}
+	
+
+		
+	}
+	
+	void RenderSolid()
+	{
+		glBindVertexArray(VAO);
+		if (top && bottom && right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+			};
+
+			GLuint i[] =
+			{
+				1, 4, 2, 5
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+		if (!top && bottom && right && left)
+		{
+			GLfloat v[] = {
+				//m_position.x,m_position.y, m_position.z,
+				bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+				m_position.x,m_position.y, m_position.z,
+				left->m_position.x,left->m_position.y, left->m_position.z,
+				right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+		if (top && !bottom && right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					//m_position.x,m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+		if (top && bottom && !right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					//m_position.x,m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+		if (top && bottom && right && !left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					//m_position.x,m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+		if (top && bottom && !right && !left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+
+		if (!top && !bottom && right && left)
+		{
+			GLfloat v[] = {
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+
+		if (!top && bottom && !right && left)
+		{
+			GLfloat v[] = {
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+
+		if (!top && bottom && right && !left)
+		{
+			GLfloat v[] = {
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+
+		if (top && !bottom && !right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+
+		if (top && !bottom && right && !left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x,m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+
+
+		if (top && !bottom && !right && !left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					/*bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		if (!top && bottom && !right && !left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					/*top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		if (!top && !bottom && right && !left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+					/*bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		if (!top && !bottom && !right && left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					//		top->m_position.x,top->m_position.y, top->m_position.z,
+							/*bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+							m_position.x, m_position.y, m_position.z,
+							right->m_position.x,right->m_position.y, right->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+	}
+
+	void
+	Render()
+	{
+		glBindVertexArray(VAO);
+		if (top && bottom && right && left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+			};
+
+			
+
+			glDisable(GL_CULL_FACE);
+
+
+			
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 6);
+		}
+
+		if (!top && bottom && right && left)
+		{
+			GLfloat v[] = {
+					//m_position.x,m_position.y, m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x,m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 6);
+		}
+		if (top && !bottom && right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x,m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 6);
+		}
+		if (top && bottom && !right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x,m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 4);
+		}
+		if (top && bottom && right && !left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x,m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 4);
+		}
+		if (top && bottom && !right && !left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+
+		if (!top && !bottom && right && left)
+		{
+			GLfloat v[] = {
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+
+		if (!top && bottom && !right && left)
+		{
+			GLfloat v[] = {
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 4);
+		}
+
+		if (!top && bottom && right && !left)
+		{
+			GLfloat v[] = {
+					bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 4);
+		}
+		
+		if (top && !bottom && !right && left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 4);
+		}
+
+		if (top && !bottom && right && !left)
+		{
+			GLfloat v[] = {
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x,m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+			glDrawArrays(GL_LINES, 0, 4);
+		}
+
+
+		if (top && !bottom && !right && !left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					/*bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,*/
+			};
+			
+			glDisable(GL_CULL_FACE);
+
+
+		
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		if (!top && bottom && !right && !left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+			        bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					/*top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		if (!top && !bottom && right && !left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,
+					/*bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					top->m_position.x,top->m_position.y, top->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		if (!top && !bottom && !right && left)
+		{
+			GLfloat v[] = {
+					m_position.x, m_position.y, m_position.z,
+					left->m_position.x,left->m_position.y, left->m_position.z,
+			//		top->m_position.x,top->m_position.y, top->m_position.z,
+					/*bottom->m_position.x,bottom->m_position.y, bottom->m_position.z,
+					m_position.x, m_position.y, m_position.z,
+					right->m_position.x,right->m_position.y, right->m_position.z,*/
+			};
+
+			glDisable(GL_CULL_FACE);
+
+
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		
+
+
+	}
+
+	
+	Particle *top = nullptr,
+			 *bottom = nullptr,
+			 *left = nullptr,
+			 *right = nullptr;
 	glm::vec3 m_position;
 	glm::vec3 m_accelaration = glm::vec3(0.0f, 0.0f,8.0f);
 	glm::vec3 m_velocity;
@@ -44,5 +658,11 @@ public:
 	{
 		m_pPosition = m_position;
 	}
+
+
+private:
+	GLuint  VAO;
+	GLuint VBO;
+	
 };
 
