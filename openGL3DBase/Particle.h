@@ -4,10 +4,27 @@
 #include <iostream>
 #include <vector>
 
+const int TOP = 0;
+const int LEFT = 1;
+const int BOTTOM = 2;
+const int RIGHT = 3;
+
+#include "Headers.h"
+#include <gtc/matrix_transform.hpp>
 class Particle
 {
 public:
 
+	struct adj
+	{
+		adj(Particle* _point, int _position)
+		{
+			point = _point;
+			position = _position;
+		}
+		Particle* point;
+		int position;
+	};
 	struct vertex
 	{
 		vertex(glm::vec3 _v)
@@ -38,23 +55,28 @@ public:
 		m_x = x;
 		m_z = z;
 		m_vertices = _vertices;
+		if(z > 0)
+		{
+			top = &(*_vertices)[x][z - 1];
+			adjacent.push_back(adj(top, TOP));
+		}
 		if(x > 0)
 		{
 			left = &(*_vertices)[x - 1][z];
+			adjacent.push_back(adj(left, LEFT));
 		}
 		if(x < 19)
 		{
 			right = &(*_vertices)[x + 1][z];
+			adjacent.push_back(adj(right, RIGHT));
 		}
 
-		if(z > 0)
-		{
-			top = &(*_vertices)[x][z - 1];
-		}
 		if (z < 19)
 		{
 			bottom = &(*_vertices)[x][z + 1];
+			adjacent.push_back(adj(bottom, BOTTOM));
 		}
+		
 
 		std::vector<vertex> verts;
 
@@ -619,6 +641,8 @@ public:
 			 *bottom = nullptr,
 			 *left = nullptr,
 			 *right = nullptr;
+
+	std::vector<adj> adjacent;
 	glm::vec3 m_position;
 	glm::vec3 m_accelaration = glm::vec3(0.0f, 0.0f,8.0f);
 	glm::vec3 m_velocity;
@@ -633,18 +657,68 @@ public:
 	void Integrate(float _dT)
 	{
 		
+			if (left)
+			{
+
+				if (glm::length(left->m_position - m_position) < 0.055)
+				{
+					position = position + velocity * dt;
+					velocity = velocity + (force / mass) * dt;
+					t = t + dt;
+					if (m_accelaration.z != 0.0f)
+						m_position.z += position * 20.0f;
+					if (position > 0.0f)
+					{
+						std::cout << "";
+					}
+				}
+				else return;
+
+			}
+			
+			
+
+			else if (bottom)
+			{
+
+				if (glm::length(bottom->m_position - m_position) < 0.055)
+				{
+					position = position + velocity * dt;
+					velocity = velocity + (force / mass) * dt;
+					t = t + dt;
+					if (m_accelaration.z != 0.0f)
+						m_position.z += position * 20.0f;
+					if (position > 0.0f)
+					{
+						std::cout << "";
+					}
+				}
+
+			}
+
+			else if (top)
+			{
+
+
+				if (abs(top->m_position.z - m_position.z) < 0.06)
+				{
+					/*position = position + velocity * dt;
+					velocity = velocity + (force / mass) * dt;
+					t = t + dt;
+					if (m_accelaration.z != 0.0f)
+						m_position.z += position * 20.0f;
+					if (position > 0.0f)
+					{
+						std::cout << "";
+					}*/
+				}
+
+			
+		}
 
 		if (t <= 20)
 		{
-			position = position + velocity * dt;
-			velocity = velocity + (force / mass) * dt;
-			t = t + dt;
-			if(m_accelaration.z != 0.0f)
-				m_position.z += position * 20.0f;
-			if(position > 0.0f)
-			{
- 				std::cout << "";
-			}
+			
 		}
 
 		else

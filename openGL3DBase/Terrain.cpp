@@ -58,11 +58,11 @@ void Terrain::createFromHeightData()
     //m_vertices.clear();
     m_textureCoordinates.clear();
     m_normals.clear();
-    m_vertices[0][0].m_accelaration = glm::vec3();
-    m_vertices[0][4].m_accelaration = glm::vec3();
-    m_vertices[0][9].m_accelaration = glm::vec3();
-    m_vertices[0][14].m_accelaration = glm::vec3();
-    m_vertices[0][19].m_accelaration = glm::vec3();
+    m_vertices[1][1].m_accelaration = glm::vec3();
+    m_vertices[1][4].m_accelaration = glm::vec3();
+    m_vertices[1][9].m_accelaration = glm::vec3();
+    m_vertices[1][14].m_accelaration = glm::vec3();
+    m_vertices[1][18].m_accelaration = glm::vec3();
     
 
     // If get here, we have succeeded with generating heightmap
@@ -109,14 +109,16 @@ void Terrain::Render()
 
 	SFOR(i, 1, 18, 1)
 	{
-		SFOR(j, 1, 18, 1)
+		SFOR(j, 2, 18, 1)
 		{
 			texture.bind();
             m_vertices[i][j].RenderSolid();
 		}
 	}
 
-    //m_vertices[5][5].RenderSolid();
+   /* m_vertices[0][0].RenderSolid();
+    m_vertices[1][1].RenderSolid();
+    m_vertices[5][5].RenderSolid();*/
 
 	
 }
@@ -126,8 +128,11 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
 {
 	if(keyInputFunc('w'))
 	{
-        m_vertices[5][5].right = nullptr;
-        m_vertices[6][5].left = nullptr;
+        m_vertices[4][5].right = nullptr;
+        m_vertices[5][5].left = nullptr;
+
+       // m_vertices[5][5].top = nullptr;
+       // m_vertices[5][5].bottom = nullptr;
 		/*m_vertices[5][5].bottom = nullptr;
         m_vertices[5][5].top = nullptr;*/
        
@@ -141,6 +146,12 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
        //
        // m_vertices[2][2].left = nullptr;
 	}
+
+	if(keyInputFunc('t'))
+	{
+        std::cout<<(m_vertices[0][0].m_position - m_vertices[0][1].m_position).x << "\t" << (m_vertices[0][0].m_position - m_vertices[0][1].m_position).z << '\n';
+        std::cout<<(m_vertices[0][0].m_position - m_vertices[1][0].m_position).x << "\t" << (m_vertices[0][0].m_position - m_vertices[1][0].m_position).z << '\n';
+	}
 }
 
 
@@ -151,7 +162,7 @@ void Terrain::Update(float _dT)
 		AFOR(j, i)
 		{
            
-            //j.Integrate(_dT);
+            j.Integrate(_dT);
 		}
 	}
 
@@ -165,11 +176,11 @@ void Terrain::Update(float _dT)
 
     flag = !flag;
 
-    m_vertices[0][0].m_accelaration = glm::vec3(0.0);
-    m_vertices[0][4].m_accelaration = glm::vec3(0.0);
-    m_vertices[0][9].m_accelaration = glm::vec3(0.0);
-    m_vertices[0][14].m_accelaration = glm::vec3(0.0);
-    m_vertices[0][19].m_accelaration = glm::vec3(0.0);
+    m_vertices[1][1].m_accelaration = glm::vec3(0.0);
+    m_vertices[1][4].m_accelaration = glm::vec3(0.0);
+    m_vertices[1][9].m_accelaration = glm::vec3(0.0);
+    m_vertices[1][14].m_accelaration = glm::vec3(0.0);
+    m_vertices[1][18 ].m_accelaration = glm::vec3(0.0);
 
 	
 }
@@ -235,6 +246,13 @@ void Terrain::setUpVertices()
 	    {
             m_vertices[i][j].init(&m_vertices, i, j);
 	    }
+    }
+
+	SFOR(i, 1, 19, 1)
+    {
+        m_vertices[1][i].left = nullptr;
+        m_vertices[18][i].right = nullptr;
+        //m_vertices[i][18].bottom = nullptr;
     }
 }
 
