@@ -20,7 +20,7 @@ GLuint mainVAO;
 
 OpenGLWindow::OpenGLWindow()
 {
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(0.0f, 0.0f, 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	camera->setRotationSpeed(50.0f);
 }
 

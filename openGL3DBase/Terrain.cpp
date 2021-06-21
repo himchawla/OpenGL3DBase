@@ -15,8 +15,9 @@ void Terrain::init(Camera* _cam)
     Object::init("vertex.vert", "fragment.frag", _cam, 0);
     createFromHeightData();
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(128.0f));
     flag = false;
+	
 }
 
 
@@ -42,8 +43,8 @@ void Terrain::createFromHeightData()
     {
         shapesVBO.addRawData(m_vertices[i].data(), m_columns * sizeof(glm::vec3));
     }
-    setUpTextureCoordinates();
-    setUpNormals();
+    /*setUpTextureCoordinates();
+    setUpNormals();*/
 
     // Send data to GPU, they're ready now
     shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
@@ -58,12 +59,17 @@ void Terrain::createFromHeightData()
     //m_vertices.clear();
     m_textureCoordinates.clear();
     m_normals.clear();
-    m_vertices[1][1].m_accelaration = glm::vec3();
-    m_vertices[1][4].m_accelaration = glm::vec3();
-    m_vertices[1][9].m_accelaration = glm::vec3();
-    m_vertices[1][14].m_accelaration = glm::vec3();
-    m_vertices[1][18].m_accelaration = glm::vec3();
-    
+    m_vertices[1][1].m_isFixed  = true;
+    m_vertices[1][4].m_isFixed  = true;
+    m_vertices[1][9].m_isFixed =  true;
+    m_vertices[1][14].m_isFixed = true;
+    m_vertices[1][18].m_isFixed = true;
+
+		 /*m_vertices[1][1].m_position.z -= 0.02f;
+		 m_vertices[1][4].m_position.z -= 0.02f;
+		 m_vertices[1][9].m_position.z -= 0.02f;
+		m_vertices[1][14].m_position.z -= 0.02f;
+		m_vertices[1][18].m_position.z -= 0.02f;*/
 
     // If get here, we have succeeded with generating heightmap
     m_isInitialized = true;
@@ -100,7 +106,8 @@ void Terrain::Render()
    /* glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(m_numVertices);*/
     transform.position.x = 0.0f;
-    program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(128.0f)));
+    program["PVM"] = camera->Project(modelMatrix);
+    //program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(128.0f)));
     program["gSampler"] = 0;
    /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawElements(GL_TRIANGLE_STRIP, m_numIndices, GL_UNSIGNED_INT, 0);
@@ -116,41 +123,67 @@ void Terrain::Render()
 		}
 	}
 
-   /* m_vertices[0][0].RenderSolid();
-    m_vertices[1][1].RenderSolid();
-    m_vertices[5][5].RenderSolid();*/
-
+   // m_vertices[1][1].RenderSolid();
+   // m_vertices[1][2].RenderSolid();
+   
 	
 }
 
 
 void Terrain::move(const std::function<bool(int)>& keyInputFunc)
 {
+	if(keyInputFunc('c'))
+	{
+		FOR(i, 20)
+		{
+			m_vertices[6][i].left = nullptr;
+			m_vertices[5][i].right = nullptr;
+		}
+
+	}
 	if(keyInputFunc('w'))
 	{
-        m_vertices[4][5].right = nullptr;
-        m_vertices[5][5].left = nullptr;
+		//setUpVertices(true);
 
-       // m_vertices[5][5].top = nullptr;
+		 
+		  m_vertices[1][1].m_isFixed = false;
+	  	 m_vertices[1][4].m_isFixed = false;
+		 m_vertices[1][9].m_isFixed = false;
+		m_vertices[1][14].m_isFixed = false;
+		m_vertices[1][18].m_isFixed = false;
+
+		// m_vertices[5][5].top = nullptr;
        // m_vertices[5][5].bottom = nullptr;
 		/*m_vertices[5][5].bottom = nullptr;
         m_vertices[5][5].top = nullptr;*/
+
+		FOR(i, 20) FOR(j, 20) m_vertices[i][j].m_released = true;
        
-        //FOR(i, 20) FOR(j, 20)
-        //{
-	       // m_vertices[i][j].top = nullptr;
-	       // m_vertices[i][j].left = nullptr;
-	       // m_vertices[i][j].bottom = nullptr;
-	       // m_vertices[i][j].right = nullptr;
-        //}
        //
        // m_vertices[2][2].left = nullptr;
 	}
 
-	if(keyInputFunc('t'))
+	if (keyInputFunc('t'))
 	{
-        std::cout<<(m_vertices[0][0].m_position - m_vertices[0][1].m_position).x << "\t" << (m_vertices[0][0].m_position - m_vertices[0][1].m_position).z << '\n';
-        std::cout<<(m_vertices[0][0].m_position - m_vertices[1][0].m_position).x << "\t" << (m_vertices[0][0].m_position - m_vertices[1][0].m_position).z << '\n';
+		FOR(i, 20) FOR(j, 20) m_vertices[i][j].m_released = false;
+
+		m_vertices[1][1].m_isFixed = true;
+		m_vertices[1][4].m_isFixed = true;
+		m_vertices[1][9].m_isFixed = true;
+		m_vertices[1][14].m_isFixed = true;
+		m_vertices[1][18].m_isFixed = true;
+		setUpVertices(true);
+	}
+
+	if(keyInputFunc('8'))
+	{
+		FOR(i, 20) FOR(j, 20)
+			m_vertices[i][j].m_accelaration.y = 0.09f;
+	}
+	if(keyInputFunc('2'))
+	{
+		FOR(i, 20) FOR(j, 20)
+			m_vertices[i][j].m_accelaration.y = -0.09f;
 	}
 }
 
@@ -161,8 +194,9 @@ void Terrain::Update(float _dT)
 	{
 		AFOR(j, i)
 		{
-           
-            j.Integrate(_dT);
+			j.preCalcs();
+            j.Integrate(0.5f);
+			j.postCal();
 		}
 	}
 
@@ -176,11 +210,11 @@ void Terrain::Update(float _dT)
 
     flag = !flag;
 
-    m_vertices[1][1].m_accelaration = glm::vec3(0.0);
-    m_vertices[1][4].m_accelaration = glm::vec3(0.0);
-    m_vertices[1][9].m_accelaration = glm::vec3(0.0);
-    m_vertices[1][14].m_accelaration = glm::vec3(0.0);
-    m_vertices[1][18 ].m_accelaration = glm::vec3(0.0);
+    /* m_vertices[1][1].m_isFixed = true;
+     m_vertices[1][4].m_isFixed = true;
+     m_vertices[1][9].m_isFixed = true;
+    m_vertices[1][14].m_isFixed = true;
+    m_vertices[1][18].m_isFixed = true;*/
 
 	
 }
@@ -221,9 +255,10 @@ float Terrain::getHeight(const int _row, const int _column) const
 
 
 
-void Terrain::setUpVertices()
+void Terrain:: setUpVertices(bool sec)
 {
-    m_vertices.resize(20);
+	
+	m_vertices.resize(20);
     FOR(i, 20)   m_vertices[i].resize(20);
     for (auto i = 0; i < m_rows; i++)
     {
@@ -239,21 +274,26 @@ void Terrain::setUpVertices()
            
         }
     }
+	
 
-	FOR(i,20)
-    {
-	    FOR(j,20)
-	    {
-            m_vertices[i][j].init(&m_vertices, i, j);
-	    }
-    }
+	
+	{
+		FOR(i, 20)
+		{
+			FOR(j, 20)
+			{
+				m_vertices[i][j].init(&m_vertices, i, j, sec);
+			}
+		}
 
-	SFOR(i, 1, 19, 1)
-    {
-        m_vertices[1][i].left = nullptr;
-        m_vertices[18][i].right = nullptr;
-        //m_vertices[i][18].bottom = nullptr;
-    }
+		SFOR(i, 1, 19, 1)
+		{
+			m_vertices[1][i].left = nullptr;
+			m_vertices[1][i].isTop = true;
+			m_vertices[18][i].right = nullptr;
+			//m_vertices[i][18].bottom = nullptr;
+		}
+	}
 }
 
 void Terrain::setUpTextureCoordinates()

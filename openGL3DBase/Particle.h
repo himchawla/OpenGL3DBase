@@ -42,6 +42,8 @@ public:
 		GLfloat x, y, z;
 	};
 
+	bool m_isFixed = false;
+	
 	std::vector<std::vector<Particle>>* m_vertices;
 
 	int m_z;
@@ -49,12 +51,14 @@ public:
 	int m_x;
 
 	GLuint EBO;
-
-	void init(std::vector <std::vector<Particle>> *_vertices, int x, int z)
+	bool isTop = false;
+	void init(std::vector <std::vector<Particle>> *_vertices, int x, int z, bool sec = false)
 	{
+		m_accelaration = glm::vec3(0.0f);
 		m_x = x;
 		m_z = z;
 		m_vertices = _vertices;
+		m_pPosition = m_position;
 		if(z > 0)
 		{
 			top = &(*_vertices)[x][z - 1];
@@ -101,10 +105,11 @@ public:
 					right->m_position.x,right->m_position.y, right->m_position.z,
 			};
 
-			
+			if(!sec)
 			glGenVertexArrays(1, &VAO);
 			glBindVertexArray(VAO);
-			
+
+			if (!sec)
 			glGenBuffers(1, &VBO);
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
@@ -644,78 +649,143 @@ public:
 
 	std::vector<adj> adjacent;
 	glm::vec3 m_position;
-	glm::vec3 m_accelaration = glm::vec3(0.0f, 0.0f,8.0f);
+	glm::vec3 m_accelaration = glm::vec3(0.0f, 0.0f,0.0f);
 	glm::vec3 m_velocity;
 	glm::vec3 m_nPosition;
 	glm::vec3 m_pPosition;
 	float t = 0.0f;
-	float dt = 1.0f/ 600000.0f; //Seconds
+	float dt = 1.0f/ 600.0f; //Seconds
 	float velocity = 0.0f;
 	float position = 0.0f;
 	float force = 0.5f;
 	float mass = 1.0f;
+	bool recentlyReleased;
+	float releaseTimer;
+
+	bool Left(float _tolerance = 0.06, bool _deafault = true)
+	{
+		if (!left) return _deafault;
+		if(glm::length(left->m_position - m_position) < _tolerance)
+		{
+			return true;
+		}
+		return false;
+	}
+
+
+	bool Right(float _tolerance = 0.06, bool _deafault = true)
+	{
+		if (!right) return _deafault;
+		if (glm::length(right->m_position - m_position) < _tolerance)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool Bottom(float _tolerance = 0.06, bool _deafault = true)
+	{
+		if (!bottom) return _deafault;
+		if (glm::length(bottom->m_position - m_position) < _tolerance)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool Top(float _tolerance = 0.06, bool _deafault = true)
+	{
+		if (!top) return _deafault;
+		if (glm::length(top->m_position - m_position) < _tolerance)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void preCalcs()
+	{
+		if (m_isFixed) 
+			return;
+		
+		
+		
+			m_accelaration.z = 0.08f;
+			if (m_position.z >= 0.8f)
+			{
+				
+			}
+		
+		
+	}
+
+	void updateBS()
+	{
+		if (top)
+			top->bottom = this;
+		if (right)
+			right->left = this;
+		if (left)
+			left->right = this;
+		if (bottom)
+			bottom->top = this;
+	}
+
+	void intoConstraint()
+	{
+		if (m_isFixed) return;
+		if (left)
+		{
+			glm::vec3 v = left->m_position - m_position;
+			float distance = 0.06f;
+			v *= ((1.0f - distance / glm::length(v)) * 0.8f);
+
+			if (!left->m_isFixed)
+			{
+				left->m_position -= v;
+				m_position += (v);
+			}
+			else m_position += 2.0f * v;
+		}
+		
+		if (bottom)
+		{
+			glm::vec3 v = bottom->m_position - m_position;
+			float distance = 0.06f;
+			v *= ((1.0f - distance / glm::length(v)) * 0.8f);
+			if (!bottom->m_isFixed)
+			{
+				bottom->m_position -= v;
+				m_position += (v);
+			}
+			else m_position += 2.0f * v;
+		}
+		//updateBS();
+	}
+
+	bool m_released;
+
 	void Integrate(float _dT)
 	{
-		
-			if (left)
-			{
+		//if (Left(0.06) && Top(0.06) && Bottom(0.06))
+		//{
+		//	m_nPosition = 2.0f * m_position - m_pPosition + m_accelaration * _dT * _dT;
+		//	//m_nPosition = m_position;
+		//	m_pPosition = m_position;
+		//	m_position = m_nPosition;
+		//	//updateBS();
+		//}
 
-				if (glm::length(left->m_position - m_position) < 0.055)
-				{
-					position = position + velocity * dt;
-					velocity = velocity + (force / mass) * dt;
-					t = t + dt;
-					if (m_accelaration.z != 0.0f)
-						m_position.z += position * 20.0f;
-					if (position > 0.0f)
-					{
-						std::cout << "";
-					}
-				}
-				else return;
+		if ((m_position.z < 0.8f) && Left(0.06) && Top(0.06) && Bottom(0.06))
+		{
+			m_nPosition = 2.0f * m_position - m_pPosition + m_accelaration * _dT * _dT;
+			//m_nPosition = m_position;
+			m_pPosition = m_position;
+			m_position = m_nPosition;
+			//updateBS();
 
-			}
-			
-			
-
-			else if (bottom)
-			{
-
-				if (glm::length(bottom->m_position - m_position) < 0.055)
-				{
-					position = position + velocity * dt;
-					velocity = velocity + (force / mass) * dt;
-					t = t + dt;
-					if (m_accelaration.z != 0.0f)
-						m_position.z += position * 20.0f;
-					if (position > 0.0f)
-					{
-						std::cout << "";
-					}
-				}
-
-			}
-
-			else if (top)
-			{
-
-
-				if (abs(top->m_position.z - m_position.z) < 0.06)
-				{
-					/*position = position + velocity * dt;
-					velocity = velocity + (force / mass) * dt;
-					t = t + dt;
-					if (m_accelaration.z != 0.0f)
-						m_position.z += position * 20.0f;
-					if (position > 0.0f)
-					{
-						std::cout << "";
-					}*/
-				}
-
-			
 		}
-
+		
 		if (t <= 20)
 		{
 			
@@ -726,6 +796,20 @@ public:
 			
 		}
 		
+	}
+
+	void postCal()
+	{
+		
+		if (m_position.z < 0.8f)
+		{
+			m_accelaration = glm::vec3(0.0f);
+			intoConstraint();
+		}
+		else
+		{
+			m_position.z = 0.8f;
+		}
 	}
 
 	void LateUpdate()

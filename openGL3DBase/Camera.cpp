@@ -11,6 +11,11 @@ void Camera::setPosition()
 	_viewPoint.y -= 2.0f;
 }
 
+glm::mat4 Camera::getprojectionMatrix()
+{
+	return	 projectionMatrix;
+}
+
 Camera::Camera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed,
                float rotationSpeed)
 	: _position(position)
@@ -76,8 +81,8 @@ void Camera::update(const std::function<bool(int)>& keyInputFunc, const std::fun
 
 	else if(quadFlag)
 	{
-		_position = glm::vec3(-2.90719509, 100.663536, -181.227371);
-		_viewPoint = glm::vec3(-2.24208665f, 100.195961f, -180.645126f);
+		_position = glm::vec3(45.4763718, 329.921875, 82.5635605);
+		_viewPoint = glm::vec3(45.4754257, 328.922913, 82.5177994);
 		quadFlag = false;
 	}
 	
@@ -114,5 +119,11 @@ void Camera::update(const std::function<bool(int)>& keyInputFunc, const std::fun
 	if(keyInputFunc('z'))
 	{
 		quadFlag = true;
+	}
+
+	if(keyInputFunc('q'))
+	{
+		_position = glm::vec3(-211.160645, 14.3958979, 39.4124260);
+		_viewPoint = glm::vec3(-210.163574, 14.3677855, 39.3413124);
 	}
 }

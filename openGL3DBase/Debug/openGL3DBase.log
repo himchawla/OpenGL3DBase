@@ -1,3 +1,16 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Camera.cpp
+  Object.cpp
+  OpenGLWindow.cpp
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
+  Source.cpp
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Source.cpp(17,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Source.cpp(18,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Source.cpp(20,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Terrain.cpp
-  openGL3DBase.vcxproj -> D:\repos\OpenGL\Debug\openGL3DBase.exe
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Source.cpp(47,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Generating Code...
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
+  openGL3DBase.vcxproj -> D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\Debug\openGL3DBase.exe

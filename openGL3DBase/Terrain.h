@@ -29,7 +29,7 @@ public:
 
 
 private:
-	void setUpVertices();
+	void setUpVertices(bool sec = false);
 	void setUpTextureCoordinates();
 	void setUpNormals();
 	void setUpIndexBuffer();
@@ -46,4 +46,5 @@ private:
 	int m_numVertices;
 	int m_numIndices = 0;
 	bool flag;
+	glm::vec3 renderedPosition;
 };
