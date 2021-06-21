@@ -1,6 +1,8 @@
 #include "Terrain.h"
 
 #include <stb_image.h>
+#include <detail/_vectorize.hpp>
+#include <detail/_vectorize.hpp>
 
 #include "Headers.h"
 
@@ -253,6 +255,10 @@ float Terrain::getHeight(const int _row, const int _column) const
     return m_heightData[_row][_column];
 }
 
+glm::vec3 Terrain::renderedPosition(int x, int z)
+{
+	return m_vertices[x][z].m_position * 128.0f;
+}
 
 
 void Terrain:: setUpVertices(bool sec)

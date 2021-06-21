@@ -26,6 +26,9 @@ public:
 	int getColumns() const;
 	float getHeight(const int _row, const int _column) const;
 
+	
+
+	glm::vec3 renderedPosition(int x, int z);
 
 
 private:
@@ -46,5 +49,4 @@ private:
 	int m_numVertices;
 	int m_numIndices = 0;
 	bool flag;
-	glm::vec3 renderedPosition;
 };

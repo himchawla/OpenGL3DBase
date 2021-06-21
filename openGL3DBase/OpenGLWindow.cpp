@@ -137,6 +137,8 @@ void OpenGLWindow::releaseScene()
 
 void OpenGLWindow::updateScene()
 {
+
+	
 	camera->update([this](int keyCode) {return this->keyPressed(keyCode); }, [this](float f) {return sin(f); });
 
 	const auto currentTime = (float)glutGet(GLUT_ELAPSED_TIME);
@@ -153,7 +155,11 @@ void OpenGLWindow::updateScene()
 	terrain.Update(_timeDelta);
 	terrain.move([this](int keyCode) {return this->keyPressed(keyCode); });
 
-
+	
+	prevX = mouseX;
+	prevY = mouseY;
+	std::cout << mouseX << '\t' << mouseY << '\n';
+	
 	
 }
 
