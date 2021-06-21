@@ -11,6 +11,11 @@ void Camera::setPosition()
 	_viewPoint.y -= 2.0f;
 }
 
+glm::mat4 Camera::getProjMatrix()
+{
+	return projectionMatrix;
+}
+
 Camera::Camera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed,
                float rotationSpeed)
 	: _position(position)

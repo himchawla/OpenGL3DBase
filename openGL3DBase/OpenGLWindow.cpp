@@ -108,7 +108,7 @@ void OpenGLWindow::initializeScene()
 	quad.transform.scale = glm::vec3(1.0f);
 	quad.setVerts(4);*/
 	
-	
+	ps = new ParticleSystem(glm::vec3(0.0f), camera, "");
 	
 }
 
@@ -129,7 +129,8 @@ void OpenGLWindow::renderScene()
 
 	//quad.quadLOD();
 	quad.RenderQuad();
-	star.RenderGeom();
+	//star.RenderGeom();
+	ps->render(0.0167f);
 	glutSwapBuffers();
 }
 

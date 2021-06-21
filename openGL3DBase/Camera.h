@@ -16,6 +16,16 @@ public:
 	bool flag;
 	bool quadFlag;
 	void setPosition();
+	glm::vec3 getCameraFront()
+	{
+		return _viewPoint;
+	}
+	glm::vec3 getCameraUp()
+	{
+		return _upVector;
+	}
+
+	glm::mat4 getProjMatrix();
 	Camera(const glm::vec3& position, const glm::vec3& viewPoint, const glm::vec3& upVector, float moveSpeed = 10.0f, float rotationSpeed = 135.0f);
 	
 	glm::mat4 Project(glm::mat4 modelMat) const;

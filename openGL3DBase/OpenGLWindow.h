@@ -7,6 +7,7 @@
 
 #include "Camera.h"
 #include "Terrain.h"
+#include "Particle.h"
 
 class OpenGLWindow
 {
@@ -53,7 +54,9 @@ public:
 	bool hasErrorOccured();
 
 private:
+	ParticleSystem *ps;
 
+	
 	Terrain terrain;
 	bool _keyWasPressed[512];
 	bool _hasErrorOccured = false;

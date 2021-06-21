@@ -1,30 +1,34 @@
 #pragma once
 #include "Object.h"
 class Terrain :
-    public Object
+	public Object
 {
 public:
 	struct HillAlgorithmParameters
 	{
-		HillAlgorithmParameters(int rows, int columns, int numHills, int hillRadiusMin, int hillRadiusMax, float hillMinHeight, float hillMaxHeight)
+		HillAlgorithmParameters(int rows, int columns)
 		{
 			this->rows = rows;
 			this->columns = columns;
-			this->numHills = numHills;
-			this->hillRadiusMin = hillRadiusMin;
-			this->hillRadiusMax = hillRadiusMax;
-			this->hillMinHeight = hillMinHeight;
-			this->hillMaxHeight = hillMaxHeight;
 		}
 
 		int rows;
 		int columns;
-		int numHills;
-		int hillRadiusMin;
-		int hillRadiusMax;
-		float hillMinHeight;
-		float hillMaxHeight;
+		
 	};
+
+	float random(int x, int y);
+
+	float interpolate(float a, float b, float x);
+
+
+	float noise(float x, float y);
+
+	float totalNoisePerPoint(int x, int y);
+
+
+	float smooth(int x, int y);
+
 
 	int getVertexByteSize()
 	{
@@ -44,11 +48,13 @@ public:
 	int getColumns() const;
 	float getHeight(const int _row, const int _column) const;
 
-	static std::vector <std::vector<float>> generateRandomHeightData(const HillAlgorithmParameters& params);
+	std::vector <std::vector<float>> generateRandomHeightData(const HillAlgorithmParameters& params);
 
 	float getRenderedHeightAtPosition(const glm::vec3& renderSize, const glm::vec3& position);
 
 private:
+
+	float seed;
 	void setUpVertices();
 	void setUpTextureCoordinates();
 	void setUpNormals();

@@ -2,16 +2,80 @@
 
 #include <stb_image.h>
 
+#include "Headers.h"
+
+float Terrain::random(int x, int y)
+{
+	int n = x + y * seed;
+	n = (n << 13) ^ n;
+	int t = (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff;
+	return 1.0 - double(t) * 0.931322574615478515625e-9;
+}
+
+float Terrain::interpolate(float a, float b, float x)
+{
+	return a * (1 - x) + b * x;
+}
+
+float Terrain::noise(float x, float y)
+{
+	float fractional_X = x - int(x);
+	float fractional_Y = y - int(y);
+
+	//smooths
+	float v1 = smooth(int(x), int(y));
+	float v2 = smooth(int(x) + 1, int(y));
+	float v3 = smooth(int(x), int(y) + 1);
+	float v4 = smooth(int(x) + 1, int(y) + 1);
+
+	// interpolates
+	float i1 = interpolate(v1, v2, fractional_X);
+	float i2 = interpolate(v3, v4, fractional_X);
+
+	return interpolate(i1, i2, fractional_Y);
+}
+
+float Terrain::totalNoisePerPoint(int x, int y)
+{
+	int octaves = 8;
+	float zoom = 20.0f;
+	float persistence = 0.6f;
+	float total = 0.0f;
+
+	for (int i = 0; i < octaves - 1; i++)
+	{
+		float frequency = pow(2, i) / zoom;
+		float amplitude = pow(persistence, i);
+
+		total += noise(x * frequency, y * frequency) * amplitude;
+	}
+	return total;
+}
+
+float Terrain::smooth(int x, int y)
+{
+	float corners;
+	float sides;
+	float center;
+
+	corners = (random(x - 1, y - 1) + random(x + 1, y - 1) + random(x - 1, y + 1) + random(x + 1, y + 1)) / 16;
+	sides = (random(x - 1, y) + random(x + 1, y) + random(x, y - 1) + random(x, y + 1)) / 8;
+	center = random(x, y) / 4;
+	return corners + sides + center;
+}
+
 Terrain::Terrain()
 		:Object()
 {
-    
+	srand(time(0));
+	seed = rand() % 100;
+	std::cout << seed;
 }
 
 void Terrain::init(Camera* _cam)
 {
     Object::init("vertex.vert", "fragment.frag", _cam, 0);
-    createFromHeightData(getHeightDataFromImage("Resources/Texture/heightmap.png"));
+    createFromHeightData(generateRandomHeightData(HillAlgorithmParameters(256,256)));
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
     modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f));
 }
@@ -145,9 +209,25 @@ float Terrain::getRenderedHeightAtPosition(const glm::vec3& renderSize, const gl
 }
 
 
+
+
 std::vector<std::vector<float>> Terrain::generateRandomHeightData(const HillAlgorithmParameters& params)
 {
-    return std::vector<std::vector<float>>();
+	int y = rand() % 100;
+	int x = rand() % 100;
+
+	m_rows = params.rows;
+	m_columns = params.columns;
+
+	m_heightData.resize(m_rows);
+	FOR(i, m_rows) m_heightData[i].resize(m_columns);
+
+	FOR(i, m_rows) FOR(j, m_columns) m_heightData[i][j] = totalNoisePerPoint(i, j);
+
+	return m_heightData;
+
+	
+	
 }
 
 void Terrain::setUpVertices()

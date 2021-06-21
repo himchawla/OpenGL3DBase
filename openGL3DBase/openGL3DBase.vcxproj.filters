@@ -54,6 +54,9 @@
     <ClInclude Include="Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenGLWindow.cpp">
@@ -92,6 +95,9 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\vertex.vert">
@@ -122,6 +128,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Resources\Shaders\postProcessing.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\particle.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\particle.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\particle.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
