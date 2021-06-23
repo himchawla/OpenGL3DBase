@@ -55,6 +55,7 @@ void main(int argc, char** argv)
 
 	glutIdleFunc(Update);
 	glutDisplayFunc(Render);
+	glutPassiveMotionFunc(mouse);
 	glutMotionFunc(mouse);
 	glutKeyboardFunc(OpenGLWindow::keyboardDown);
 	glutKeyboardUpFunc(OpenGLWindow::keyboardUp);

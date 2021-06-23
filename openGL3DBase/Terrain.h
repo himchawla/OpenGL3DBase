@@ -5,7 +5,9 @@ class Terrain :
     public Object
 {
 public:
-	
+
+	Object* cube;
+	float m_fanSpeed = 0.09f;
 
 	int getVertexByteSize()
 	{
@@ -26,9 +28,8 @@ public:
 	int getColumns() const;
 	float getHeight(const int _row, const int _column) const;
 
-	
 
-	glm::vec3 renderedPosition(int x, int z);
+	Particle* renderedPosition(float x, float z);
 
 
 private:

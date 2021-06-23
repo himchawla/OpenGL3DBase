@@ -56,7 +56,7 @@ OpenGLWindow::inputState OpenGLWindow::KeyState[255];
 float rotationAngleRad;
 void OpenGLWindow::initializeScene()
 {
-	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	vertexShader.loadShaderFromFile("Resources/Shaders/vertex.vert", GL_VERTEX_SHADER);
 	fragmentShader.loadShaderFromFile("Resources/Shaders/fragment.frag", GL_FRAGMENT_SHADER);
@@ -94,15 +94,18 @@ void OpenGLWindow::initializeScene()
 	cube1.setTexture("Resources/Texture/Rayman.png");
 	cube2.init(vertexShader, fragmentShader, 0, shapesVBO, texCoordsVBO, camera, &terrain);
 	cube2.setTexture("Resources/Texture/Rayman.png");
-	cube1.transform.position = glm::vec3();
+	//cube1.transform.position = glm::vec3(0.0f, 128.0f, 0.0f);
 	cube2.transform.position = glm::vec3(4.0f, 0.0f, 0.0f);
-
+	cube1.transform.scale = glm::vec3(5.0f);
+	cube1.scale();
+	terrain.cube = &cube1;
 	star.init("Geometery.vert", "Geometery.frag", "Geometery.geom", camera, 1);
 	//star.setTexture("Resources/Texture/Red.png");
 	
 	camera->cube = &cube1;
 
 	quad.initQuad("tess.vert", "tess.frag", camera, true);
+	
 
 	/*quad.GetVBO().addUpload(Object3D::quadVertices,0);
 	quad.transform.scale = glm::vec3(1.0f);
@@ -117,9 +120,10 @@ void OpenGLWindow::renderScene()
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	terrain.Render();
-
+	cube1.Render();
 	glutSwapBuffers();
 }
 
@@ -154,11 +158,34 @@ void OpenGLWindow::updateScene()
 	}
 	terrain.Update(_timeDelta);
 	terrain.move([this](int keyCode) {return this->keyPressed(keyCode); });
+	//cube1.Update(_timeDelta, [this](int keyCode) {return this->keyPressed(keyCode); });
 
+	float dX = mouseX - prevX;
+	float dY = mouseY - prevY;
+
+	if(dX < 0.0f)
+	{
+		cube1.Update(_timeDelta,'a');
+	}
+
+	if (dX > 0.0f)
+	{
+		cube1.Update(_timeDelta,'d');
+	}
+
+	if (dY < 0.0f)
+	{
+		cube1.Update(_timeDelta,'w');
+	}
+
+	if (dY > 0.0f)
+	{
+		cube1.Update(_timeDelta,'s');
+	}
 	
 	prevX = mouseX;
 	prevY = mouseY;
-	std::cout << mouseX << '\t' << mouseY << '\n';
+	//std::cout << mouseX << '\t' << mouseY << '\n';
 	
 	
 }
@@ -174,7 +201,7 @@ bool OpenGLWindow::keyPressed(int keyCode)
 	return OpenGLWindow::KeyState[keyCode] == Input_Down;
 }
 
-bool OpenGLWindow::keyPressedOnce(int keyCode)
+bool OpenGLWindow:: keyPressedOnce(int keyCode)
 {
 	return true;
 }

@@ -1,4 +1,5 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  OpenGLWindow.cpp
-D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
-  openGL3DBase.vcxproj -> D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase\Debug\openGL3DBase.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Terrain.cpp
+D:\repos\OpenGL\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\repos\OpenGL\openGL3DBase\Terrain.cpp(336,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+  openGL3DBase.vcxproj -> D:\repos\OpenGL\Debug\openGL3DBase.exe

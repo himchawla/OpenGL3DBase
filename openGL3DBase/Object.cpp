@@ -219,8 +219,14 @@ void Object::quadLOD()
 
 }
 
-void Object::Update(float _dT)
+void Object::scale()
 {
+	modelMatrix = glm::scale(modelMatrix, transform.scale);
+}
+
+void Object::Update(float _dT, char ch)
+{
+	
 	modelMatrix[3][0] = transform.position.x;
 	modelMatrix[3][1] = transform.position.y;
 	modelMatrix[3][2] = transform.position.z;
@@ -233,7 +239,24 @@ void Object::Update(float _dT)
 	modelMatrix = glm::rotate(modelMatrix, transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	modelMatrix = glm::rotate(modelMatrix, transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	modelMatrix = glm::rotate(modelMatrix, transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	modelMatrix = glm::scale(modelMatrix, transform.scale);
+
+	if(ch =='a')
+	{
+		transform.position.x -= 0.40f;
+	}
+	if(ch =='d')
+	{
+		transform.position.x += 0.4f;
+	}
+
+	if(ch =='w')
+	{
+		transform.position.z += 0.40f;
+	}
+	if(ch =='s')
+	{
+		transform.position.z -= 0.4f;
+	}
 }
 
 void Object::Render()

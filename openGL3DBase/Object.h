@@ -46,8 +46,9 @@ public:
 
 	Object();
 	void quadLOD();
+	void scale();
 
-	void Update(float _dT);
+	void Update(float _dT, char ch);
 	void Render();
 	void RenderQuad();
 	void RenderGeom();

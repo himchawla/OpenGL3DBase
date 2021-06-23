@@ -3,6 +3,8 @@
 #include <stb_image.h>
 #include <detail/_vectorize.hpp>
 #include <detail/_vectorize.hpp>
+#include <detail/_vectorize.hpp>
+#include <detail/_vectorize.hpp>
 
 #include "Headers.h"
 
@@ -16,8 +18,8 @@ void Terrain::init(Camera* _cam)
 {
     Object::init("vertex.vert", "fragment.frag", _cam, 0);
     createFromHeightData();
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
     modelMatrix = glm::scale(modelMatrix, glm::vec3(128.0f));
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
     flag = false;
 	
 }
@@ -118,7 +120,7 @@ void Terrain::Render()
 
 	SFOR(i, 1, 18, 1)
 	{
-		SFOR(j, 2, 18, 1)
+		SFOR(j, 1, 18, 1)
 		{
 			texture.bind();
             m_vertices[i][j].RenderSolid();
@@ -134,16 +136,69 @@ void Terrain::Render()
 
 void Terrain::move(const std::function<bool(int)>& keyInputFunc)
 {
+
+	if(keyInputFunc('n'))
+	{
+		if(cube->transform.scale.x < 1000.0f)
+		{
+           // cube->transform.scale = cube->transform.scale + glm::vec3(1.0f);
+		}
+	}
 	if(keyInputFunc('c'))
 	{
-		FOR(i, 20)
-		{
-			m_vertices[6][i].left = nullptr;
-			m_vertices[5][i].right = nullptr;
-		}
-
+        Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
+        if (temp != nullptr)
+        {
+            if (temp->left != nullptr) {
+                temp->left->right = nullptr;
+                temp->left = nullptr;
+            }
+            else if(temp->top != nullptr)
+            {
+                temp->top->bottom = nullptr;
+                temp->top = nullptr;
+            }
+               /* FOR(i, 20) FOR(j, 20)   if (glm::length(temp->m_position - m_vertices[i][j].m_position) < 0.02f)
+                {
+                    if (m_vertices[i][j].left != nullptr)
+                    {
+                        m_vertices[i][j].left->right = nullptr;
+                        m_vertices[i][j].left = nullptr;
+                    }
+                    else  if (m_vertices[i][j].top != nullptr)
+                    {
+                        m_vertices[i][j].top->bottom = nullptr;
+                        m_vertices[i][j].top = nullptr; 
+                    }
+                }*/
+            
+        }
+       
 	}
-	if(keyInputFunc('w'))
+    if (keyInputFunc('v'))
+    {
+        Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
+        if (temp != nullptr)
+        {
+            temp->m_accelaration.y += 0.5f;
+            if (temp->left != nullptr) {
+                temp->left->m_accelaration.y += 0.3f;
+            }
+            if (temp->top != nullptr)
+            {
+                temp->top->m_accelaration.y += 0.3f;
+            }
+            if (temp->right != nullptr) {
+                temp->right->m_accelaration.y += 0.3f;
+            }
+            if (temp->bottom != nullptr)
+            {         
+                temp->bottom->m_accelaration.y += 0.3f;
+            }
+        }
+
+    }
+	if(keyInputFunc('t'))
 	{
 		//setUpVertices(true);
 
@@ -165,7 +220,7 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
        // m_vertices[2][2].left = nullptr;
 	}
 
-	if (keyInputFunc('t'))
+	if (keyInputFunc('r'))
 	{
 		FOR(i, 20) FOR(j, 20) m_vertices[i][j].m_released = false;
 
@@ -177,16 +232,34 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
 		setUpVertices(true);
 	}
 
+	if(keyInputFunc('f'))
+	{
+        std::cin >> m_fanSpeed;
+        if (m_fanSpeed < 0.02f) m_fanSpeed = 0.02f;
+        else if (m_fanSpeed > 0.7f)  m_fanSpeed = 0.7f;
+	}
 	if(keyInputFunc('8'))
 	{
 		FOR(i, 20) FOR(j, 20)
-			m_vertices[i][j].m_accelaration.y = 0.09f;
+			m_vertices[i][j].m_accelaration.y = m_fanSpeed;
 	}
 	if(keyInputFunc('2'))
 	{
 		FOR(i, 20) FOR(j, 20)
-			m_vertices[i][j].m_accelaration.y = -0.09f;
+			m_vertices[i][j].m_accelaration.y = -m_fanSpeed;
 	}
+
+    if (keyInputFunc('4'))
+    {
+        FOR(i, 20) FOR(j, 20)
+            m_vertices[i][j].m_accelaration.x = -m_fanSpeed;
+    }
+
+    if (keyInputFunc('6'))
+    {
+        FOR(i, 20) FOR(j, 20)
+            m_vertices[i][j].m_accelaration.x = m_fanSpeed;
+    }
 }
 
 
@@ -197,7 +270,7 @@ void Terrain::Update(float _dT)
 		AFOR(j, i)
 		{
 			j.preCalcs();
-            j.Integrate(0.5f);
+            j.Integrate(0.2f);
 			j.postCal();
 		}
 	}
@@ -255,9 +328,26 @@ float Terrain::getHeight(const int _row, const int _column) const
     return m_heightData[_row][_column];
 }
 
-glm::vec3 Terrain::renderedPosition(int x, int z)
+Particle* Terrain::renderedPosition(float x, float z)
 {
-	return m_vertices[x][z].m_position * 128.0f;
+    x /= 128.0f;
+    z /= 128.0f;
+
+    float d = 0.2;
+    int xp = 0;
+    int yp = 0;
+	FOR(i, 20) FOR(j, 20)
+	{
+        glm::vec2 xz = glm::vec2(m_vertices[i][j].m_position.x, m_vertices[i][j].m_position.z);
+        //std::cout << glm::length(xz - glm::vec2(x, z)) << "\t" << xz.x << "\t" << xz.y << "\t"<< x << "\t" << z << "\n";
+		if(glm::length(xz - glm::vec2(x, z)) < d)
+		{
+            d = glm::length(xz - glm::vec2(x, z));
+            xp = i; yp = j;
+            //return &m_vertices[i][j];
+		}
+	}
+    return &m_vertices[xp][yp];
 }
 
 

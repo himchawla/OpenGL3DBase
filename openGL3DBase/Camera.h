@@ -48,8 +48,11 @@ private:
 		glm::mat4 rotationMatrix;
 		if (axis == 'y')
 			rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), glm::vec3(0.0f, 1.0f, 0.0f));
-		else
+		else if(axis == 'x')
 			rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), glm::vec3(1.0f, 0.0f, 0.0f));
+		else
+			rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angleInDegrees), glm::vec3(0.0f, 0.0f, 1.0f));
+
 		glm::vec4 rotatedViewVector = rotationMatrix * glm::vec4(getNormalizedViewVector(), 0.0f);
 		_viewPoint = _position + glm::vec3(rotatedViewVector.x, rotatedViewVector.y, rotatedViewVector.z);
 		std::cout << _position.x << '\t' << _position.z << '\n';

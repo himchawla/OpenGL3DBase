@@ -56,6 +56,8 @@ public:
 	{
 		mouseX = (2.0f * x) / (float)1000;
 		mouseY = 1.0f - (2.0f * y) / (float)1000;
+
+		//std::cout << mouseX << "\t" << mouseY << '\n';
 	}
 
 
