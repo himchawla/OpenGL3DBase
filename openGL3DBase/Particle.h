@@ -15,6 +15,7 @@ class Particle
 {
 public:
 
+	bool m_releaseAll;
 	struct adj
 	{
 		adj(Particle* _point, int _position)
@@ -42,6 +43,11 @@ public:
 		GLfloat x, y, z;
 	};
 
+	void Color()
+	{
+		
+	}
+
 	bool m_isFixed = false;
 	
 	std::vector<std::vector<Particle>>* m_vertices;
@@ -52,8 +58,9 @@ public:
 
 	GLuint EBO;
 	bool isTop = false;
-	void init(std::vector <std::vector<Particle>> *_vertices, int x, int z, bool sec = false)
+	void init(std::vector <std::vector<Particle>> *_vertices, int x, int z, float tolerance = 0.06, bool sec = false)
 	{
+		m_tolerance = tolerance + tolerance * 0.14f;
 		m_accelaration = glm::vec3(0.0f);
 		m_x = x;
 		m_z = z;
@@ -69,13 +76,13 @@ public:
 			left = &(*_vertices)[x - 1][z];
 			adjacent.push_back(adj(left, LEFT));
 		}
-		if(x < 19)
+		if(x < _vertices->size() - 1)
 		{
 			right = &(*_vertices)[x + 1][z];
 			adjacent.push_back(adj(right, RIGHT));
 		}
 
-		if (z < 19)
+		if (z < _vertices[0].size() -1)
 		{
 			bottom = &(*_vertices)[x][z + 1];
 			adjacent.push_back(adj(bottom, BOTTOM));
@@ -214,7 +221,7 @@ public:
 
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+			//glDrawArrays(GL_TRIANGLES, 0, 3);
 		}
 		if (top && bottom && !right && !left)
 		{
@@ -385,8 +392,7 @@ public:
 		}
 	}
 
-	void
-	Render()
+	void Render()
 	{
 		glBindVertexArray(VAO);
 		if (top && bottom && right && left)
@@ -710,7 +716,7 @@ public:
 		
 		
 		
-			m_accelaration.z = 0.08f;
+			m_accelaration.z = 80.0f;
 			if (m_position.z >= 0.8f)
 			{
 				
@@ -733,11 +739,12 @@ public:
 
 	void intoConstraint()
 	{
+		float distance = m_tolerance;
 		if (m_isFixed) return;
 		if (left)
 		{
 			glm::vec3 v = left->m_position - m_position;
-			float distance = 0.06f;
+			
 			v *= ((1.0f - distance / glm::length(v)) * 0.8f);
 
 			if (!left->m_isFixed)
@@ -751,7 +758,6 @@ public:
 		if (bottom)
 		{
 			glm::vec3 v = bottom->m_position - m_position;
-			float distance = 0.06f;
 			v *= ((1.0f - distance / glm::length(v)) * 0.8f);
 			if (!bottom->m_isFixed)
 			{
@@ -765,6 +771,8 @@ public:
 
 	bool m_released;
 
+	float m_tolerance;
+
 	void Integrate(float _dT)
 	{
 		//if (Left(0.06) && Top(0.06) && Bottom(0.06))
@@ -776,12 +784,14 @@ public:
 		//	//updateBS();
 		//}
 
-		if ((m_position.z < 0.8f) && Left(0.06) && Top(0.06) && Bottom(0.06))
+		if ((m_position.z < 0.8f) && Left(m_tolerance) && Top(m_tolerance) && Bottom(m_tolerance) && Right(m_tolerance))
 		{
 			m_nPosition = 2.0f * m_position - m_pPosition + m_accelaration * _dT * _dT;
 			//m_nPosition = m_position;
 			m_pPosition = m_position;
 			m_position = m_nPosition;
+			/*if (glm::length(m_accelaration) > 3.0f)
+				m_releaseAll = true;*/
 			//updateBS();
 
 		}
@@ -801,14 +811,68 @@ public:
 	void postCal()
 	{
 		
-		if (m_position.z < 0.8f)
+		if (m_position.z > 0.8f)
 		{
-			m_accelaration = glm::vec3(0.0f);
+			m_accelaration = glm::vec3(0);
+			m_position.z = 0.8f;
+
 			intoConstraint();
 		}
 		else
 		{
-			m_position.z = 0.8f;
+			if (glm::length(m_accelaration) > 605.0f)
+			{
+				m_releaseAll = true;
+			}
+			
+			
+			if (m_accelaration.x < -0.01f)
+			{
+				//std::cout << m_accelaration.x << '\n';
+				m_accelaration.x -= m_accelaration.x * 0.167;
+
+			}
+			else if(m_accelaration.x < 0.0f)
+			{
+				m_accelaration.x = 0.0f;
+			}
+
+			
+
+			if (m_accelaration.y < -0.01f)
+			{
+				m_accelaration.y -= m_accelaration.y * 0.167;
+			}
+			else if (m_accelaration.y < 0.0f)
+			{
+				m_accelaration.y = 0.0f;
+			}
+
+
+			
+			if (m_accelaration.x > 0.01f)
+			{
+				m_accelaration.x -= m_accelaration.x * 0.167;
+			}
+			else if (m_accelaration.x > 0.0f)
+			{
+				m_accelaration.x = 0.0f;
+			}
+
+			if (m_accelaration.y > 0.01f)
+			{
+				m_accelaration.y -= m_accelaration.y * 0.167;
+			}
+			else if (m_accelaration.y > 0.0f)
+			{
+				m_accelaration.y = 0.0f;
+			}
+
+			m_accelaration.z = 0.0f;
+
+			
+			
+			intoConstraint();
 		}
 	}
 

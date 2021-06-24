@@ -1,23 +1,27 @@
 #pragma once
 #include "Object.h"
 #include "Particle.h"
-class Terrain :
+class Cloth :
     public Object
 {
 public:
 
 	Object* cube;
-	float m_fanSpeed = 0.09f;
+	float m_fanSpeed = 6000.0f;
+	int m_hooks = 5;
+	float m_tolerance = 0.06;
+	bool m_wireFrame;
+	bool m_releaseAll;
 
 	int getVertexByteSize()
 	{
 		return sizeof(glm::vec3) * 2 + sizeof(glm::vec2);
 	}
 
-	Terrain();
+	Cloth();
 	
 	void init(Camera* _cam);
-	void createFromHeightData();
+	void createCloth();
 
 	void Render();
 	void move(const std::function<bool(int)>& keyInputFunc);

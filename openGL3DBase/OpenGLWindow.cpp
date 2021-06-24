@@ -54,7 +54,7 @@ OpenGLWindow::inputState OpenGLWindow::KeyState[255];
 
 
 float rotationAngleRad;
-void OpenGLWindow::initializeScene()
+void OpenGLWindow::	initializeScene()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

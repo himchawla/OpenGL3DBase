@@ -1,5 +1,152 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Terrain.cpp
-D:\repos\OpenGL\openGL3DBase\Particle.h(779,1): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\repos\OpenGL\openGL3DBase\Terrain.cpp(336,18): warning C4305: 'initializing': truncation from 'double' to 'float'
-  openGL3DBase.vcxproj -> D:\repos\OpenGL\Debug\openGL3DBase.exe
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(79,8): warning C4018: '<': signed/unsigned mismatch
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(85,9): warning C4018: '<': signed/unsigned mismatch
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(832,1): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(832,1): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(832,1): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(832,1): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(832,1): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(844,1): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(844,1): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(844,1): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(844,1): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(844,1): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(855,1): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(855,1): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(855,1): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(855,1): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(855,1): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(864,1): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(864,1): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(864,1): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(864,1): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Particle.h(864,1): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.h(12,26): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(239,56): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(239,56): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(239,56): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(239,56): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(239,56): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(241,62): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(241,62): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(241,62): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(241,62): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(241,62): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(245,61): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(245,61): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(245,61): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(245,61): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(245,61): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(248,63): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(248,63): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(248,63): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(248,63): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(248,63): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(252,64): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(252,64): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(252,64): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(252,64): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(252,64): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(262,56): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(262,56): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(262,56): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(262,56): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(262,56): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(264,62): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(264,62): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(264,62): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(264,62): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(264,62): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(268,61): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(268,61): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(268,61): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(268,61): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(268,61): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(271,63): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(271,63): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(271,63): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(271,63): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(271,63): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(275,64): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(275,64): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(275,64): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(275,64): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(275,64): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(285,56): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(285,56): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(285,56): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(285,56): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(285,56): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(287,62): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(287,62): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(287,62): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(287,62): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(287,62): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(291,61): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(291,61): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(291,61): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(291,61): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(291,61): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(294,63): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(294,63): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(294,63): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(294,63): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(294,63): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(298,64): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(298,64): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(298,64): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(298,64): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(298,64): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(308,56): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(308,56): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(308,56): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(308,56): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(308,56): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(310,62): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(310,62): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(310,62): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(310,62): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(310,62): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(314,61): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(314,61): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(314,61): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(314,61): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(314,61): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(317,63): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(317,63): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(317,63): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(317,63): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(317,63): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(321,64): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(321,64): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(321,64): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(321,64): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(321,64): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(331,56): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(331,56): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(331,56): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(331,56): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(331,56): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(333,62): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(333,62): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(333,62): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(333,62): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(333,62): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(337,61): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(337,61): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(337,61): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(337,61): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(337,61): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(340,63): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(340,63): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(340,63): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(340,63): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(340,63): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(344,64): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(344,64): warning C4244:         with
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(344,64): warning C4244:         [
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(344,64): warning C4244:             T=float
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(344,64): warning C4244:         ]
+D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\openGL3DBase\Terrain.cpp(511,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+  openGL3DBase.vcxproj -> D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\Debug\openGL3DBase.exe

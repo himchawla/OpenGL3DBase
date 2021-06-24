@@ -7,7 +7,7 @@
 #include "sampler.h"
 #include "Texture.h"
 
-class Terrain;
+class Cloth;
 
 class Object
 {
@@ -24,7 +24,7 @@ public:
 
 	glm::vec3 velocity;
 
-	Terrain* terrain;
+	Cloth* terrain;
 	GLuint vbo;
 	GLuint vao;
 
@@ -33,7 +33,7 @@ public:
 	bool initQuad(std::string _vertPath, std::string _fragPath, Camera* _camera, bool genVAO);
 	bool init(std::string _vertPath, std::string _fragPath, std::string _geomPath, Camera* _camera, bool genVAO);
 	bool init(shader _vertex, shader _frag, GLuint _VAO, VertexBufferObject _shapes, VertexBufferObject _colors,
-	          Camera* _cam, Terrain* _terrain);
+	          Camera* _cam, Cloth* _terrain);
 	void setVertexAttributesPointers(int numVertices);
 
 	template<typename T>

@@ -7,17 +7,20 @@
 #include <detail/_vectorize.hpp>
 
 #include "Headers.h"
+//#include <ft2build.h>
+//#include <freetype.h>
 
-Terrain::Terrain()
+Cloth::Cloth()
 		:Object()
 {
-    
+	m_rows = 20;
+	m_columns = 20;
 }
 
-void Terrain::init(Camera* _cam)
+void Cloth::init(Camera* _cam)
 {
     Object::init("vertex.vert", "fragment.frag", _cam, 0);
-    createFromHeightData();
+    createCloth();
     modelMatrix = glm::scale(modelMatrix, glm::vec3(128.0f));
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
     flag = false;
@@ -25,14 +28,14 @@ void Terrain::init(Camera* _cam)
 }
 
 
-void Terrain::createFromHeightData()
+void Cloth::createCloth()
 {
     if (m_isInitialized) {
         shapesVBO.deleteVBO();
     }
 
-	m_heightData.resize(20);
-	FOR(i, 20) m_heightData[i].resize(20);
+	m_heightData.resize(m_rows);
+	FOR(i, m_rows) m_heightData[i].resize(m_columns);
     m_rows = static_cast<int>(m_heightData.size());
     m_columns = static_cast<int>(m_heightData[0].size());
     m_numVertices = m_rows * m_columns;
@@ -47,8 +50,8 @@ void Terrain::createFromHeightData()
     {
         shapesVBO.addRawData(m_vertices[i].data(), m_columns * sizeof(glm::vec3));
     }
-    /*setUpTextureCoordinates();
-    setUpNormals();*/
+    setUpTextureCoordinates();
+    //setUpNormals();
 
     // Send data to GPU, they're ready now
     shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
@@ -79,7 +82,7 @@ void Terrain::createFromHeightData()
     m_isInitialized = true;
 }
 
-void Terrain::Render()
+void Cloth::Render()
 {
     if (!m_isInitialized) {
         return;
@@ -94,12 +97,12 @@ void Terrain::Render()
     for (auto i = 0; i < m_rows; i++)
     {
         std::vector<glm::vec3>temp;
-        temp.resize(20);
-        FOR(j, 20) temp[j] = m_vertices[i][j].m_position;
+        temp.resize(m_columns);
+        FOR(j, m_columns) temp[j] = m_vertices[i][j].m_position;
         shapesVBO.addRawData(temp.data(), m_columns * sizeof(glm::vec3));
     }
     setUpTextureCoordinates();
-    setUpNormals();
+    //setUpNormals();
 
     // Send data to GPU, they're ready now
     shapesVBO.uploadDataToGPU(GL_STATIC_DRAW);
@@ -112,19 +115,36 @@ void Terrain::Render()
     transform.position.x = 0.0f;
     program["PVM"] = camera->Project(modelMatrix);
     //program["PVM"] = camera->Project(glm::scale(modelMatrix, glm::vec3(128.0f)));
-    program["gSampler"] = 0;
+   // program["gSampler"] = 0;
    /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawElements(GL_TRIANGLE_STRIP, m_numIndices, GL_UNSIGNED_INT, 0);
     glDisable(GL_PRIMITIVE_RESTART);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
 
-	SFOR(i, 1, 18, 1)
+	SFOR(i, 2, m_rows - 2, 1)
 	{
-		SFOR(j, 1, 18, 1)
+		SFOR(j, 1, m_columns - 2, 1)
 		{
-			texture.bind();
-            m_vertices[i][j].RenderSolid();
+			if((i+j) %2)
+				program["color"] = glm::vec4(1.0, 0.0, 0.0, 1.0);
+			else
+				program["color"] = glm::vec4(0.0, 1.0, 0.0, 1.0);
+			if (m_vertices[i][j].m_releaseAll)
+				m_releaseAll = true;
+			//texture.bind();
+			if (m_wireFrame)
+				m_vertices[i][j].Render();
+			else
+				m_vertices[i][j].RenderSolid();
+
+			
 		}
+	}
+
+	if (m_releaseAll)
+	{
+		FOR(i, m_columns)
+			m_vertices[1][i].m_isFixed = false;
 	}
 
    // m_vertices[1][1].RenderSolid();
@@ -134,9 +154,39 @@ void Terrain::Render()
 }
 
 
-void Terrain::move(const std::function<bool(int)>& keyInputFunc)
+void Cloth::move(const std::function<bool(int)>& keyInputFunc)
 {
+	if(keyInputFunc('p'))
+	{
+		m_wireFrame = !m_wireFrame;
+	}
+	if(keyInputFunc('y'))
+	{
+		std::cout << "Rows: ";
+		std::cin >> m_columns;
+		std::cout << "\nColumns: ";
+		std::cin >> m_rows;
 
+		if (m_rows != m_columns)
+			m_rows = m_columns;
+		
+
+		setUpVertices(false);
+		FOR(i, m_rows) FOR(j, m_columns) {
+			m_vertices[i][j].m_released = false;
+			m_vertices[i][j].m_accelaration = glm::vec3(0.0);
+			m_vertices[i][j].m_releaseAll = false;
+		}
+		m_releaseAll = false;
+
+		std::cout << m_columns / m_hooks;
+		FOR(i, 20)	m_vertices[1][i].m_isFixed = false;
+		SFOR(j, 0, m_columns - m_columns / m_hooks, m_columns / m_hooks)
+			m_vertices[1][j].m_isFixed = true;
+		m_vertices[1][m_columns - 1].m_isFixed = true;
+		m_tolerance = glm::length(m_vertices[0][0].m_position - m_vertices[0][1].m_position);
+		
+	}
 	if(keyInputFunc('n'))
 	{
 		if(cube->transform.scale.x < 1000.0f)
@@ -152,25 +202,19 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
             if (temp->left != nullptr) {
                 temp->left->right = nullptr;
                 temp->left = nullptr;
+				temp->updateBS();
+				//temp = nullptr;
             }
-            else if(temp->top != nullptr)
+            if(temp->top != nullptr)
             {
+
                 temp->top->bottom = nullptr;
                 temp->top = nullptr;
+				temp->updateBS();
+            	temp = nullptr;
+
             }
-               /* FOR(i, 20) FOR(j, 20)   if (glm::length(temp->m_position - m_vertices[i][j].m_position) < 0.02f)
-                {
-                    if (m_vertices[i][j].left != nullptr)
-                    {
-                        m_vertices[i][j].left->right = nullptr;
-                        m_vertices[i][j].left = nullptr;
-                    }
-                    else  if (m_vertices[i][j].top != nullptr)
-                    {
-                        m_vertices[i][j].top->bottom = nullptr;
-                        m_vertices[i][j].top = nullptr; 
-                    }
-                }*/
+                
             
         }
        
@@ -178,43 +222,158 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
     if (keyInputFunc('v'))
     {
         Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
-        if (temp != nullptr)
-        {
-            temp->m_accelaration.y += 0.5f;
-            if (temp->left != nullptr) {
-                temp->left->m_accelaration.y += 0.3f;
-            }
-            if (temp->top != nullptr)
-            {
-                temp->top->m_accelaration.y += 0.3f;
-            }
-            if (temp->right != nullptr) {
-                temp->right->m_accelaration.y += 0.3f;
-            }
-            if (temp->bottom != nullptr)
-            {         
-                temp->bottom->m_accelaration.y += 0.3f;
-            }
-        }
+		if (temp != nullptr)
+		{
+			temp->m_accelaration.z += m_fanSpeed * 0.5 * 0.0167f;
+			if (temp->left != nullptr) {
+				temp->left->m_accelaration.z += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->top != nullptr)
+			{
+				temp->top->m_accelaration.z += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->right != nullptr) {
+				temp->right->m_accelaration.z += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->bottom != nullptr)
+			{
+				temp->bottom->m_accelaration.z += m_fanSpeed * 0.5 * 0.0167;
+			}
+		}
 
     }
+
+	if (keyInputFunc('s'))
+	{
+		Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
+		if (temp != nullptr)
+		{
+			temp->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167f;
+			if (temp->left != nullptr) {
+				temp->left->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->top != nullptr)
+			{
+				temp->top->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->right != nullptr) {
+				temp->right->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->bottom != nullptr)
+			{
+				temp->bottom->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+		}
+	}
+
+	if (keyInputFunc('b'))
+	{
+		Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
+		if (temp != nullptr)
+		{
+			temp->m_accelaration.z -= m_fanSpeed * 0.5 * 0.0167f;
+			if (temp->left != nullptr) {
+				temp->left->m_accelaration.z -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->top != nullptr)
+			{
+				temp->top->m_accelaration.z -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->right != nullptr) {
+				temp->right->m_accelaration.z -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->bottom != nullptr)
+			{
+				temp->bottom->m_accelaration.z -= m_fanSpeed * 0.5 * 0.0167;
+			}
+		}
+
+	}
+	if (keyInputFunc('w'))
+	{
+		Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
+		if (temp != nullptr)
+		{
+			temp->m_accelaration.y += m_fanSpeed * 0.8f * 0.0167;
+			if (temp->left != nullptr) {
+				temp->left->m_accelaration.y += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->top != nullptr)
+			{
+				temp->top->m_accelaration.y += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->right != nullptr) {
+				temp->right->m_accelaration.y += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->bottom != nullptr)
+			{
+				temp->bottom->m_accelaration.y += m_fanSpeed * 0.5 * 0.0167;
+			}
+		}
+
+	}
+	if (keyInputFunc('d'))
+	{
+		Particle* temp = renderedPosition(cube->transform.position.x, cube->transform.position.z);
+		if (temp != nullptr)
+		{
+			temp->m_accelaration.x += m_fanSpeed * 0.8f * 0.0167;
+			if (temp->left != nullptr) {
+				temp->left->m_accelaration.x += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->top != nullptr)
+			{
+				temp->top->m_accelaration.x += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->right != nullptr) {
+				temp->right->m_accelaration.x += m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->bottom != nullptr)
+			{
+				temp->bottom->m_accelaration.x += m_fanSpeed * 0.5 * 0.0167;
+			}
+		}
+
+	}
+	if (keyInputFunc('a'))
+	{
+		Particle* temp = renderedPosition(cube->transform.position.y, cube->transform.position.z);
+		if (temp != nullptr)
+		{
+			temp->m_accelaration.y -= m_fanSpeed * 0.8f * 0.0167;
+			if (temp->left != nullptr) {
+				temp->left->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->top != nullptr)
+			{
+				temp->top->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->right != nullptr) {
+				temp->right->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+			if (temp->bottom != nullptr)
+			{
+				temp->bottom->m_accelaration.y -= m_fanSpeed * 0.5 * 0.0167;
+			}
+		}
+
+	}
 	if(keyInputFunc('t'))
 	{
 		//setUpVertices(true);
 
+		 FOR(i, m_columns)
+		 {
+			 m_vertices[1][i].m_isFixed = false;
+		 }
 		 
-		  m_vertices[1][1].m_isFixed = false;
-	  	 m_vertices[1][4].m_isFixed = false;
-		 m_vertices[1][9].m_isFixed = false;
-		m_vertices[1][14].m_isFixed = false;
-		m_vertices[1][18].m_isFixed = false;
 
 		// m_vertices[5][5].top = nullptr;
        // m_vertices[5][5].bottom = nullptr;
 		/*m_vertices[5][5].bottom = nullptr;
         m_vertices[5][5].top = nullptr;*/
 
-		FOR(i, 20) FOR(j, 20) m_vertices[i][j].m_released = true;
+		FOR(i, m_rows) FOR(j, m_columns) m_vertices[i][j].m_released = true;
        
        //
        // m_vertices[2][2].left = nullptr;
@@ -222,58 +381,86 @@ void Terrain::move(const std::function<bool(int)>& keyInputFunc)
 
 	if (keyInputFunc('r'))
 	{
-		FOR(i, 20) FOR(j, 20) m_vertices[i][j].m_released = false;
 
-		m_vertices[1][1].m_isFixed = true;
-		m_vertices[1][4].m_isFixed = true;
-		m_vertices[1][9].m_isFixed = true;
-		m_vertices[1][14].m_isFixed = true;
-		m_vertices[1][18].m_isFixed = true;
+		setUpVertices(true);
+		FOR(i, m_rows) FOR(j, m_columns) {
+			m_vertices[i][j].m_released = false;
+			m_vertices[i][j].m_accelaration = glm::vec3(0.0);
+			m_vertices[i][j].m_releaseAll = false;
+		}
+		m_releaseAll = false;
+
+		std::cout << m_columns / m_hooks;
+		FOR(i, 20)	m_vertices[1][i].m_isFixed = false;
+		SFOR(j, 0, m_columns - m_columns / m_hooks, m_columns / m_hooks)
+		m_vertices[1][j].m_isFixed = true;
+		m_vertices[1][m_columns - 1].m_isFixed = true;
+		m_tolerance = glm::length(m_vertices[0][0].m_position - m_vertices[0][1].m_position);
+	}
+
+	if(keyInputFunc('h'))
+	{
+		std::cout << "Hooks :";
+		std::cin >> m_hooks;
+		m_hooks > m_columns ? m_hooks = m_columns:m_hooks = m_hooks;
+		FOR(i, m_rows) FOR(j, m_columns) m_vertices[i][j].m_released = false;
+		std::cout << m_columns / m_hooks;
+		FOR(i, 20)	m_vertices[1][i].m_isFixed = false;
+
+		SFOR(j, 0, m_columns - m_columns / m_hooks, m_columns / m_hooks)
+			m_vertices[1][j].m_isFixed = true;
+		m_vertices[1][m_columns - 1].m_isFixed = true;
+		m_tolerance = glm::length(m_vertices[0][0].m_position - m_vertices[0][1].m_position);
 		setUpVertices(true);
 	}
 
 	if(keyInputFunc('f'))
 	{
         std::cin >> m_fanSpeed;
-        if (m_fanSpeed < 0.02f) m_fanSpeed = 0.02f;
-        else if (m_fanSpeed > 0.7f)  m_fanSpeed = 0.7f;
+        if (m_fanSpeed < 5.0f) m_fanSpeed = 5.0f;
+        else if (m_fanSpeed > 10.0f)  m_fanSpeed = 10.0f;
+		m_fanSpeed *= 1000;
 	}
 	if(keyInputFunc('8'))
 	{
-		FOR(i, 20) FOR(j, 20)
-			m_vertices[i][j].m_accelaration.y = m_fanSpeed;
+		FOR(i, m_rows) FOR(j, m_columns)
+			m_vertices[i][j].m_accelaration.y += m_fanSpeed * 0.0167f;
 	}
 	if(keyInputFunc('2'))
 	{
-		FOR(i, 20) FOR(j, 20)
-			m_vertices[i][j].m_accelaration.y = -m_fanSpeed;
+		FOR(i, m_rows) FOR(j, m_columns)
+			m_vertices[i][j].m_accelaration.y += -m_fanSpeed * 0.0167f;
 	}
 
     if (keyInputFunc('4'))
     {
-        FOR(i, 20) FOR(j, 20)
-            m_vertices[i][j].m_accelaration.x = -m_fanSpeed;
+		FOR(i, m_rows) FOR(j, m_columns)
+    		m_vertices[i][j].m_accelaration.x += -m_fanSpeed * 0.0167f;
     }
 
     if (keyInputFunc('6'))
     {
-        FOR(i, 20) FOR(j, 20)
-            m_vertices[i][j].m_accelaration.x = m_fanSpeed;
+		FOR(i, m_rows) FOR(j, m_columns)
+            m_vertices[i][j].m_accelaration.x += m_fanSpeed * 0.0167f;
     }
 }
 
 
-void Terrain::Update(float _dT)
+void Cloth::Update(float _dT)
 {
 	AFOR(i, m_vertices)
 	{
 		AFOR(j, i)
 		{
 			j.preCalcs();
-            j.Integrate(0.2f);
+            j.Integrate(0.0167f);
 			j.postCal();
+			if (m_releaseAll)
+				j.m_released = true;
 		}
 	}
+
+	
 
     AFOR(i, m_vertices)
     {
@@ -294,7 +481,7 @@ void Terrain::Update(float _dT)
 	
 }
 
-void Terrain::RenderPoints()
+void Cloth::RenderPoints()
 {
     if (!m_isInitialized) {
         return;
@@ -309,17 +496,17 @@ void Terrain::RenderPoints()
 
 
 
-int Terrain::getRows() const
+int Cloth::getRows() const
 {
     return m_rows;
 }
 
-int Terrain::getColumns() const
+int Cloth::getColumns() const
 {
     return m_columns;
 }
 
-float Terrain::getHeight(const int _row, const int _column) const
+float Cloth::getHeight(const int _row, const int _column) const
 {
     if (_row < 0 || _row >= m_rows || _column < 0 || _column >= m_columns) {
         return 0.0f;
@@ -328,7 +515,7 @@ float Terrain::getHeight(const int _row, const int _column) const
     return m_heightData[_row][_column];
 }
 
-Particle* Terrain::renderedPosition(float x, float z)
+Particle* Cloth::renderedPosition(float x, float z)
 {
     x /= 128.0f;
     z /= 128.0f;
@@ -336,7 +523,7 @@ Particle* Terrain::renderedPosition(float x, float z)
     float d = 0.2;
     int xp = 0;
     int yp = 0;
-	FOR(i, 20) FOR(j, 20)
+	FOR(i, m_rows) FOR(j, m_columns)
 	{
         glm::vec2 xz = glm::vec2(m_vertices[i][j].m_position.x, m_vertices[i][j].m_position.z);
         //std::cout << glm::length(xz - glm::vec2(x, z)) << "\t" << xz.x << "\t" << xz.y << "\t"<< x << "\t" << z << "\n";
@@ -351,11 +538,14 @@ Particle* Terrain::renderedPosition(float x, float z)
 }
 
 
-void Terrain:: setUpVertices(bool sec)
+void Cloth:: setUpVertices(bool sec)
 {
 	
-	m_vertices.resize(20);
-    FOR(i, 20)   m_vertices[i].resize(20);
+	m_vertices.resize(m_rows);
+    FOR(i, m_rows)   m_vertices[i].resize(m_columns);
+
+	m_heightData.resize(m_rows);
+	FOR(i, m_rows)	m_heightData[i].resize(m_columns);
     for (auto i = 0; i < m_rows; i++)
     {
         for (auto j = 0; j < m_columns; j++)
@@ -374,25 +564,25 @@ void Terrain:: setUpVertices(bool sec)
 
 	
 	{
-		FOR(i, 20)
+		FOR(i, m_rows)
 		{
-			FOR(j, 20)
+			FOR(j, m_columns)
 			{
-				m_vertices[i][j].init(&m_vertices, i, j, sec);
+				m_vertices[i][j].init(&m_vertices, i, j, m_tolerance, sec);
 			}
 		}
 
-		SFOR(i, 1, 19, 1)
+		SFOR(i, 1, m_columns - 1, 1)
 		{
 			m_vertices[1][i].left = nullptr;
 			m_vertices[1][i].isTop = true;
-			m_vertices[18][i].right = nullptr;
+			m_vertices[m_rows - 2][i].right = nullptr;
 			//m_vertices[i][18].bottom = nullptr;
 		}
 	}
 }
 
-void Terrain::setUpTextureCoordinates()
+void Cloth::setUpTextureCoordinates()
 {
     m_textureCoordinates = std::vector<std::vector<glm::vec2>>(m_rows, std::vector<glm::vec2>(m_columns));
 
@@ -402,13 +592,18 @@ void Terrain::setUpTextureCoordinates()
     for (auto i = 0; i < m_rows; i++)
     {
         for (auto j = 0; j < m_columns; j++) {
-            m_textureCoordinates[i][j] = glm::vec2(textureStepU * j, textureStepV * i);
+
+        	if((i + j) % 2)
+				m_textureCoordinates[i][j] = glm::vec2(0.0,0.0);
+
+        	if((i + j) % 2 == 0)
+				m_textureCoordinates[i][j] = glm::vec2(1.0,1.0);
         }
         shapesVBO.addRawData(m_textureCoordinates[i].data(), m_columns * sizeof(glm::vec2));
     }
 }
 
-void Terrain::setUpNormals()
+void Cloth::setUpNormals()
 {
     m_normals = std::vector<std::vector<glm::vec3>>(m_rows, std::vector<glm::vec3>(m_columns));
     std::vector< std::vector<glm::vec3> > tempNormals[2];
@@ -478,7 +673,7 @@ void Terrain::setUpNormals()
     }
 }
 
-void Terrain::setUpIndexBuffer()
+void Cloth::setUpIndexBuffer()
 {
     // Create a VBO with heightmap indices
     indexVBO.createVBO();

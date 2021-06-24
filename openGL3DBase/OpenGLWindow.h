@@ -76,7 +76,7 @@ private:
 
 	
 
-	Terrain terrain;
+	Cloth terrain;
 	bool _keyWasPressed[512];
 	bool _hasErrorOccured = false;
 	float _timeDelta;

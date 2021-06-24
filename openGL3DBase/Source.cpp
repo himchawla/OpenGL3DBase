@@ -42,7 +42,10 @@ void mouse(int x, int y)
 {
 	win.mousePassive(x, y);
 }
-
+void timer(int) {
+	glutPostRedisplay();
+	glutTimerFunc(1000 / 60, timer, 0);
+}
 void main(int argc, char** argv)
 {
 	
@@ -52,12 +55,14 @@ void main(int argc, char** argv)
 		return;
 	}
 	win.initializeScene();
-
+	glutTimerFunc(1000 / 60, timer, 0);
+	
 	glutIdleFunc(Update);
 	glutDisplayFunc(Render);
 	glutPassiveMotionFunc(mouse);
 	glutMotionFunc(mouse);
 	glutKeyboardFunc(OpenGLWindow::keyboardDown);
 	glutKeyboardUpFunc(OpenGLWindow::keyboardUp);
+	
 	glutMainLoop();
 }

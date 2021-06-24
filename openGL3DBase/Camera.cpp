@@ -85,6 +85,12 @@ void Camera::update(const std::function<bool(int)>& keyInputFunc, const std::fun
 		_viewPoint = glm::vec3(45.4754257, 328.922913, 82.5177994);
 		quadFlag = false;
 	}
+
+	if(keyInputFunc('e'))
+	{
+		_position = glm::vec3(173.647614, 114.217056, 115.208969);
+		_viewPoint = glm::vec3(-172.790421, 113.911880, 114.794144);
+	}
 	
 	if (keyInputFunc(_forwardKeyCode)) {
 		moveBy(speedCorrectionFunc(_moveSpeed));
@@ -111,10 +117,10 @@ void Camera::update(const std::function<bool(int)>& keyInputFunc, const std::fun
 		flag = true;
 	}
 
-	if(keyInputFunc(_resetKeyCode))
+	/*if(keyInputFunc(_resetKeyCode))
 	{
 		flag = false;
-	}
+	}*/
 
 	if(keyInputFunc('z'))
 	{

@@ -11,6 +11,6 @@ uniform vec4 color;
 
 void main()
 {
-    vec4 texColor = texture(gSampler, ioVertexTexCoord);
-    outputColor = texColor;
+    
+		outputColor = color;
 }

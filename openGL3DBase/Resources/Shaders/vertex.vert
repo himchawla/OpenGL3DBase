@@ -15,7 +15,6 @@ void main()
 {
 	gl_Position = PVM * vec4(vertexPosition, 1.0);
 	
-	ioVertexTexCoord = vertexTexCoord;
-    ioVertexNormal = normalMatrix * vertexNormal;
+
     ioHeight = vertexPosition.y;
 }

@@ -124,7 +124,7 @@ bool Object::init(std::string _vertPath, std::string _fragPath,std::string _geom
 	return true;
 }
 
-bool Object::init(shader _vertex, shader _frag, GLuint _VAO, VertexBufferObject _shapes, VertexBufferObject _colors, Camera* _cam, Terrain* _terrain)
+bool Object::init(shader _vertex, shader _frag, GLuint _VAO, VertexBufferObject _shapes, VertexBufferObject _colors, Camera* _cam, Cloth* _terrain)
 {
 	vertexShader = _vertex;
 	fragmentShader = _frag;
@@ -267,6 +267,7 @@ void Object::Render()
 		glBindVertexArray(mainVAO);
 		program["PVM"] = camera->Project(modelMatrix);
 		//program["gSampler"] = 0;
+		program["color"] = glm::vec4(0.0f, 0.0f, 1.0f, 1.0);
 		texture.bind();
 		glDrawArrays(GL_TRIANGLES, 0, _numVertices);
 		glBindVertexArray(0);
