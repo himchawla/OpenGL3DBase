@@ -55,6 +55,7 @@ public:
 
 private:
 	ParticleSystem *ps;
+	ParticleSystem *psGPU;
 
 	
 	Terrain terrain;

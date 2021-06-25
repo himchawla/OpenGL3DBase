@@ -54,9 +54,12 @@
     <None Include="Resources\Shaders\Geometery.frag" />
     <None Include="Resources\Shaders\Geometery.geom" />
     <None Include="Resources\Shaders\Geometery.vert" />
+    <None Include="Resources\Shaders\particle.comp" />
     <None Include="Resources\Shaders\particle.frag" />
     <None Include="Resources\Shaders\particle.geom" />
     <None Include="Resources\Shaders\particle.vert" />
+    <None Include="Resources\Shaders\particleGPU.frag" />
+    <None Include="Resources\Shaders\particleGPU.vert" />
     <None Include="Resources\Shaders\postProcessing.frag" />
     <None Include="Resources\Shaders\tess.frag" />
     <None Include="Resources\Shaders\tess.tesc" />

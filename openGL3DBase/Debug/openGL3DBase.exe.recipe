@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\repos\OpenGL\Debug\openGL3DBase.exe</FullPath>
+      <FullPath>D:\repos\OpenGL3DBase\Debug\openGL3DBase.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

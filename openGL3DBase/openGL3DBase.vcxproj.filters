@@ -139,5 +139,14 @@
     <None Include="Resources\Shaders\particle.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Resources\Shaders\particle.comp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\particleGPU.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\particleGPU.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

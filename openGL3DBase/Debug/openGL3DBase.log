@@ -1,3 +1,15 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  OpenGLWindow.cpp
-  openGL3DBase.vcxproj -> D:\Users\MDS00001xo\Documents\GitHub\try2\OpenGL3DBase2\Debug\openGL3DBase.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(519,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (openGLBase.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Particle.cpp
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(7,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(18,38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(23,34): warning C4244: '+=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(163,28): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(192,29): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(206,31): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(235,29): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\repos\OpenGL3DBase\openGL3DBase\Particle.cpp(251,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  openGL3DBase.vcxproj -> D:\repos\OpenGL3DBase\Debug\openGL3DBase.exe

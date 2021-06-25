@@ -1,27 +1,28 @@
 #version 460 core
 
 layout (points) in;
-layout (triangle_strip, max_vertices = 9) out;
-out vec3 outColor;
+layout (triangle_strip, max_vertices = 6) out;
+out vec4 outColor;
 
-in VS_GS_VERTEX{
-	in vec4 position;
-	in vec3 color;
-	in mat4 mvp;
-}gs_in[];
+uniform mat4 vp;
+uniform vec3 vQuad1, vQuad2;
+
 
 void main() 
 { 
-	outColor = gs_in[0].color;
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(-0.5f, 0.0f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(0.5f, 0.0f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(0.0f, 1.0f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(0.0f, 1.0f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(-0.2f, 0.0f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(0.2f, 0.0f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(-0.5f, 0.6f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(0.5f, 0.6f, 0.0f, 0.0f); EmitVertex();
-	gl_Position = gs_in[0].position + gs_in[0].mvp * vec4(0.0f, -0.5f, 0.0f, 0.0f); EmitVertex();
+	outColor = vec4(1.0f,1.0f,1.0f,1.0f);
+
+	float size = 0.1;
+
+	vec3 p1 = gl_in[0].gl_Position.xyz + (-vQuad1-vQuad2)* size;
+	gl_Position = vp * vec4(p1, 1.0f);EmitVertex();
+	vec3 p2 = gl_in[0].gl_Position.xyz + (-vQuad1+vQuad2)* size;
+	gl_Position = vp * vec4(p2, 1.0f);EmitVertex();
+	vec3 p3 = gl_in[0].gl_Position.xyz + (vQuad1-vQuad2)* size;
+	gl_Position = vp * vec4(p3, 1.0f);EmitVertex();
+	vec3 p4 = gl_in[0].gl_Position.xyz + (vQuad1+vQuad2)* size;
+	gl_Position = vp * vec4(p4, 1.0f);EmitVertex();
+	
 	
 	EndPrimitive();
 }
